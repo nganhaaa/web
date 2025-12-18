@@ -1,41 +1,41 @@
-import React from 'react'
 import { assets } from '../assets/assets'
+import './ChristmasTheme.css'
 
 const Footer = () => {
   return (
-    <footer>
-      <div className='flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-14 my-10 mt-40 text-sm'>
+    <footer className='christmas-footer py-10'>
+      <div className='flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-14 my-10 text-sm'>
         <div>
-          <img src={assets.logo} className='mb-5 w-32' alt="" />
-          <p className='w-full md:w-2/3 text-gray-600'>
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+          <img src={assets.logo} className='mb-5 w-32 brightness-0 invert' alt="" />
+          <p className='w-full md:w-2/3 text-white opacity-80'>
+          🎄 Your one-stop shop for all festive fashion needs. Delivering joy and style this Christmas season!
           </p>
         </div>
 
         <div>
-          <p className='text-xl font-medium mb-5'>COMPANY</p>
-          <ul className='flex flex-col gap-1 text-gray-600'>
-            <li>Home</li>
-            <li>About us</li>
-            <li>Delivery</li>
-            <li>Privacy policy</li>
+          <p className='christmas-footer-title text-xl mb-5'>COMPANY</p>
+          <ul className='flex flex-col gap-2 text-white opacity-80'>
+            <li className='hover:opacity-100 cursor-pointer'>🏠 Home</li>
+            <li className='hover:opacity-100 cursor-pointer'>ℹ️ About us</li>
+            <li className='hover:opacity-100 cursor-pointer'>🚚 Delivery</li>
+            <li className='hover:opacity-100 cursor-pointer'>🔒 Privacy policy</li>
           </ul>
         </div>
 
         <div>
-          <p className='text-xl font-medium mb-5'>GET IN TOUCH</p>
-          <ul className='flex flex-col gap-1 text-gray-600'>
-            <li>+1-000-000-0000</li>
-            <li>contact@gmail.com</li>
-            <li>Instagram</li>
+          <p className='christmas-footer-title text-xl mb-5'>GET IN TOUCH</p>
+          <ul className='flex flex-col gap-2 text-white opacity-80'>
+            <li className='hover:opacity-100'>📞 +1-000-000-0000</li>
+            <li className='hover:opacity-100'>✉️ contact@gmail.com</li>
+            <li className='hover:opacity-100 cursor-pointer'>📸 Instagram</li>
           </ul>
         </div>
 
       </div>
 
       <div>
-        <hr/>
-        <p className='text-center py-5 text-sm'>Copyright 2024 - All Right Reserved.</p>
+        <hr className='border-gold-500'/>
+        <p className='text-center py-5 text-sm text-white opacity-80'>🎅 Copyright 2024 - All Right Reserved. Happy Holidays! 🎄</p>
       </div>
     </footer>
   )

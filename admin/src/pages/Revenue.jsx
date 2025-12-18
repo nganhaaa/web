@@ -14,6 +14,7 @@ import { Line, Bar } from "react-chartjs-2";
 import { backendUrl } from '../App';
 import axios from 'axios';
 import { toast } from "react-toastify";
+import '../components/ChristmasRevenue.css';
 
 ChartJS.register(
   CategoryScale,
@@ -117,21 +118,27 @@ const Revenue = ({token}) => {
         title: {
           display: true,
           text: "Months",
-          font: { size: 14 },
+          font: { size: 14, weight: 'bold' },
+          color: '#165b33',
+        },
+        ticks: {
+          color: '#165b33',
         },
       },
       y: {
         beginAtZero: true,
         grid: {
-          color: 'rgba(0, 0, 0, 0.1)',
+          color: 'rgba(255, 215, 0, 0.2)',
         },
         title: {
           display: true,
           text: "Revenue",
-          font: { size: 14 },
+          font: { size: 14, weight: 'bold' },
+          color: '#165b33',
         },
         ticks: {
           callback: (value) => `$${value}`,
+          color: '#165b33',
         },
       },
     },
@@ -142,12 +149,13 @@ const Revenue = ({token}) => {
       },
       title: {
         display: true,
-        text: `Revenue Overview ${selectedYear}`,
+        text: `💰 Revenue Overview ${selectedYear}`,
         font: {
           size: 20,
           weight: 'bold',
         },
         padding: 20,
+        color: '#c41e3a',
       },
     },
   };
@@ -159,14 +167,18 @@ const Revenue = ({token}) => {
         grid: {
           display: false,
         },
+        ticks: {
+          color: '#165b33',
+        },
       },
       y: {
         beginAtZero: true,
         grid: {
-          color: 'rgba(0, 0, 0, 0.1)',
+          color: 'rgba(255, 215, 0, 0.2)',
         },
         ticks: {
           callback: (value) => `$${value}`,
+          color: '#165b33',
         },
       },
     },
@@ -194,72 +206,44 @@ const Revenue = ({token}) => {
   ];
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 sm:justify-between my-8">
-      <div className="md:w-[66%] bg-white p-6 rounded-lg shadow-lg">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-700">Revenue Analytics</h2>
-          <select
-            className="px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-300"
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
-          >
-            {years.map((year) => (
-              <option key={year} value={year}>{year}</option>
-            ))}
-          </select>
-        </div>
-        <div className="h-[500px]">
-          <Line
-            options={lineChartOptions}
-            data={{
-              labels: months,
-              datasets: [
-                {
-                  label: "Revenue",
-                  data: revenueYear,
-                  borderColor: "rgba(244, 63, 94, 0.8)",
-                  backgroundColor: "rgba(244, 63, 94, 0.1)",
-                  borderWidth: 2,
-                  fill: true,
-                  tension: 0.4,
-                  pointRadius: 4,
-                  pointHoverRadius: 6,
-                },
-              ],
-            }}
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col md:w-[33%] gap-4">
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">Category Revenue</h3>
-          <div className="h-[210px]">
-            <Bar
-              options={{
-                ...barChartOptions,
-                plugins: {
-                  ...barChartOptions.plugins,
-                  title: {
-                    display: true,
-                    text: "Revenue by Category",
-                    font: { size: 16, weight: 'bold' },
-                    padding: 10,
-                  },
-                },
-              }}
+    <div className="christmas-revenue-container my-8">
+      <h1 className="christmas-card-title text-2xl mb-6">📊 Revenue Analytics Dashboard</h1>
+      
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="md:w-[66%] christmas-card">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="christmas-card-title">
+              📈 Monthly Revenue Trends
+            </h2>
+            <select
+              className="christmas-year-select"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+            >
+              {years.map((year) => (
+                <option key={year} value={year}>{year}</option>
+              ))}
+            </select>
+          </div>
+          <div className="christmas-chart-container h-[500px]">
+            <Line
+              options={lineChartOptions}
               data={{
-                labels: Object.keys(revenueCate),
+                labels: months,
                 datasets: [
                   {
                     label: "Revenue",
-                    data: Object.values(revenueCate),
-                    backgroundColor: [
-                      'rgba(59, 130, 246, 0.8)',
-                      'rgba(16, 185, 129, 0.8)',
-                      'rgba(251, 191, 36, 0.8)',
-                    ],
-                    borderRadius: 6,
+                    data: revenueYear,
+                    borderColor: "#c41e3a",
+                    backgroundColor: "rgba(196, 30, 58, 0.1)",
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: "#c41e3a",
+                    pointBorderColor: "#ffd700",
+                    pointBorderWidth: 2,
                   },
                 ],
               }}
@@ -267,38 +251,93 @@ const Revenue = ({token}) => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">Subcategory Revenue</h3>
-          <div className="h-[210px]">
-            <Bar
-              options={{
-                ...barChartOptions,
-                plugins: {
-                  ...barChartOptions.plugins,
-                  title: {
-                    display: true,
-                    text: "Revenue by Subcategory",
-                    font: { size: 16, weight: 'bold' },
-                    padding: 10,
+        <div className="flex flex-col md:w-[33%] gap-4">
+          <div className="christmas-card">
+            <h3 className="christmas-card-title">
+              👥 Category Revenue
+            </h3>
+            <div className="christmas-chart-container h-[210px]">
+              <Bar
+                options={{
+                  ...barChartOptions,
+                  plugins: {
+                    ...barChartOptions.plugins,
+                    title: {
+                      display: true,
+                      text: "Revenue by Category",
+                      font: { size: 16, weight: 'bold' },
+                      padding: 10,
+                      color: '#165b33',
+                    },
                   },
-                },
-              }}
-              data={{
-                labels: Object.keys(revenueSubcate),
-                datasets: [
-                  {
-                    label: "Revenue",
-                    data: Object.values(revenueSubcate),
-                    backgroundColor: [
-                      'rgba(244, 63, 94, 0.8)',
-                      'rgba(168, 85, 247, 0.8)',
-                      'rgba(234, 88, 12, 0.8)',
-                    ],
-                    borderRadius: 6,
+                }}
+                data={{
+                  labels: Object.keys(revenueCate).map(key => key === 'Men' ? '👨 Men' : key === 'Women' ? '👩 Women' : '👶 Kids'),
+                  datasets: [
+                    {
+                      label: "Revenue",
+                      data: Object.values(revenueCate),
+                      backgroundColor: [
+                        'rgba(22, 91, 51, 0.8)',
+                        'rgba(196, 30, 58, 0.8)',
+                        'rgba(255, 215, 0, 0.8)',
+                      ],
+                      borderColor: [
+                        '#165b33',
+                        '#c41e3a',
+                        '#ffd700',
+                      ],
+                      borderWidth: 2,
+                      borderRadius: 8,
+                    },
+                  ],
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="christmas-card">
+            <h3 className="christmas-card-title">
+              🏷️ Subcategory Revenue
+            </h3>
+            <div className="christmas-chart-container h-[210px]">
+              <Bar
+                options={{
+                  ...barChartOptions,
+                  plugins: {
+                    ...barChartOptions.plugins,
+                    title: {
+                      display: true,
+                      text: "Revenue by Subcategory",
+                      font: { size: 16, weight: 'bold' },
+                      padding: 10,
+                      color: '#165b33',
+                    },
                   },
-                ],
-              }}
-            />
+                }}
+                data={{
+                  labels: Object.keys(revenueSubcate),
+                  datasets: [
+                    {
+                      label: "Revenue",
+                      data: Object.values(revenueSubcate),
+                      backgroundColor: [
+                        'rgba(196, 30, 58, 0.8)',
+                        'rgba(22, 91, 51, 0.8)',
+                        'rgba(139, 0, 0, 0.8)',
+                      ],
+                      borderColor: [
+                        '#c41e3a',
+                        '#165b33',
+                        '#8b0000',
+                      ],
+                      borderWidth: 2,
+                      borderRadius: 8,
+                    },
+                  ],
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>

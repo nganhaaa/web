@@ -4,6 +4,7 @@ import { backendUrl, currency } from '../App';
 import { toast } from 'react-toastify';
 import { assets } from '../assets/assets';
 import Pagination from '../components/Pagination';
+import '../components/ChristmasForm.css';
 
 const List = ({token}) => {
   const [list, setList] = useState([]);
@@ -84,15 +85,15 @@ const List = ({token}) => {
   return (
     <div className='my-8'>
       <div className='flex flex-col sm:flex-row gap-2 justify-between items-center mb-4'>
-        <p>All Products List</p>
+        <h2 className="christmas-form-title">📋 All Products List</h2>
         <div>
-          <div className="inline-flex items-center justify-center border border-gray-400 px-5 py-2 rounded-full">
+          <div className="christmas-search-box inline-flex items-center justify-center">
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 outline-none bg-inherit text-sm border-none"
+              className="christmas-search-input flex-1 text-sm"
               type="text"
-              placeholder="Search"
+              placeholder="Search products..."
             />
             <img className="w-4" src={assets.search_icon} alt="" />
           </div>
@@ -101,7 +102,7 @@ const List = ({token}) => {
 
       <div className='flex flex-col gap-2'>
 
-        <div className='hidden md:grid grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center py-1 px-2 border bg-gray-100 text-sm'>
+        <div className='christmas-table-header hidden md:grid grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center py-3 px-4 text-sm'>
           <b>Image</b>
           <b>Name</b>
           <b>Category</b>
@@ -110,12 +111,12 @@ const List = ({token}) => {
         </div>
 
         {currentItems.map((item, index) => (
-          <div className='grid grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border text-sm' key={index}>
-            <img className='w-12' src={item.image[0]} alt="" />
+          <div className='christmas-table-row grid grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-2 py-3 px-4 text-sm' key={index}>
+            <img className='w-12 rounded-lg' src={item.image[0]} alt="" />
             <p>{item.name}</p>
             <p>{item.category}</p>
-            <p>{currency}{item.price}</p>
-            <p onClick={() => removeProduct(item._id)} className='text-right md:text-center cursor-pointer text-lg'>X</p>
+            <p className="font-semibold">{currency}{item.price}</p>
+            <p onClick={() => removeProduct(item._id)} className='christmas-delete-btn text-right md:text-center cursor-pointer'>❌</p>
           </div>
         ))}
       </div>

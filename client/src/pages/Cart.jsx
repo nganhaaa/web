@@ -3,6 +3,7 @@ import { ShopContext } from '../context/ShopContext';
 import Title from '../components/Title';
 import { assets } from '../assets/assets';
 import CartTotal from '../components/CartTotal';
+import '../components/ChristmasTheme.css';
 
 const Cart = () => {
   const { products, currency, cartItems, updateQuantity, navigate } = useContext(ShopContext);
@@ -30,11 +31,11 @@ const Cart = () => {
   return (
     <div className="border-t pt-14">
       <div className=" text-2xl mb-3">
-        <Title text1={'YOUR'} text2={'CART'} />
+        <Title text1={'YOUR'} text2={'CART 🛒'} />
       </div>
       {cartData.length == 0 && (
         <div className="flex justify-center mt-10">
-          <p>There are no products.</p>
+          <p className="text-gray-500">🎄 Your cart is empty. Start shopping!</p>
         </div>
       )}
       <div>
@@ -44,18 +45,18 @@ const Cart = () => {
           return (
             <div
               key={index}
-              className="py-4 border-t border-b text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4"
+              className="py-4 border-t border-b border-gold-200 text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4"
             >
               <div className=" flex items-start gap-6" style={{ cursor: "pointer" }} onClick={() => { window.location.pathname = `/product/${item._id}` }}>
-                <img className="w-16 sm:w-20" src={productData.image[0]} alt="" />
+                <img className="w-16 sm:w-20 rounded-lg border-2 border-gold-300" src={productData.image[0]} alt="" />
                 <div>
                   <p className="text-xs sm:text-lg font-medium">{productData.name}</p>
                   <div className="flex items-center gap-5 mt-2">
-                    <p>
+                    <p className="font-semibold text-red-600">
                       {currency}
                       {productData.price}
                     </p>
-                    <p className="px-2 sm:px-3 sm:py-1 border bg-slate-50">{item.size}</p>
+                    <p className="px-2 sm:px-3 sm:py-1 border-2 border-gold-400 bg-yellow-50 rounded">{item.size}</p>
                   </div>
                 </div>
               </div>
@@ -65,7 +66,7 @@ const Cart = () => {
                     ? null
                     : updateQuantity(item._id, item.size, Number(e.target.value))
                 }
-                className="border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1"
+                className="christmas-input max-w-10 sm:max-w-20 px-1 sm:px-2 py-1"
                 type="number"
                 min={1}
                 defaultValue={item.quantity}
@@ -73,9 +74,10 @@ const Cart = () => {
               <div className="flex">
                 <img
                   onClick={() => updateQuantity(item._id, item.size, 0)}
-                  className="w-4 mr-4 sm:w-5 cursor-pointer"
+                  className="w-4 mr-4 sm:w-5 cursor-pointer hover:scale-110 transition"
                   src={assets.bin_icon}
                   alt=""
+                  title="Remove item"
                 />
               </div>
 
@@ -89,8 +91,8 @@ const Cart = () => {
           <div className="w-full sm:w-[450px]">
             <CartTotal />
             <div className=" w-full text-end">
-              <button onClick={() => navigate('/place-order')} className="bg-black text-white text-sm my-8 px-8 py-3">
-                PROCEED TO CHECKOUT
+              <button onClick={() => navigate('/place-order')} className="christmas-btn-primary w-full sm:w-auto my-8">
+                PROCEED TO CHECKOUT 🎁
               </button>
             </div>
           </div>

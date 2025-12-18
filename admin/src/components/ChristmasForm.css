@@ -1,0 +1,226 @@
+/* Christmas Form Styles */
+.christmas-form-container {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+  border: 3px solid #ffd700;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 8px 30px rgba(196, 30, 58, 0.15);
+}
+
+.christmas-form-title {
+  color: #c41e3a;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(196, 30, 58, 0.2);
+}
+
+.christmas-label {
+  color: #165b33;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.christmas-input,
+.christmas-textarea,
+.christmas-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  background: white;
+  color: #333;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.christmas-input:focus,
+.christmas-textarea:focus,
+.christmas-select:focus {
+  outline: none;
+  border-color: #c41e3a;
+  box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
+  background: #fff5f5;
+}
+
+.christmas-input::placeholder,
+.christmas-textarea::placeholder {
+  color: #999;
+}
+
+.christmas-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.christmas-select {
+  cursor: pointer;
+}
+
+.christmas-upload-area {
+  border: 2px dashed #ffd700;
+  border-radius: 8px;
+  padding: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.christmas-upload-area:hover {
+  border-color: #c41e3a;
+  background: #fff5f5;
+  transform: scale(1.05);
+}
+
+.christmas-size-btn {
+  padding: 8px 16px;
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  background: white;
+}
+
+.christmas-size-btn.active {
+  background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
+  color: white;
+  border-color: #c41e3a;
+  box-shadow: 0 4px 15px rgba(196, 30, 58, 0.3);
+}
+
+.christmas-size-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(196, 30, 58, 0.2);
+}
+
+.christmas-checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.christmas-checkbox-container:hover {
+  background: #fff5f5;
+  border-color: #c41e3a;
+}
+
+.christmas-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #c41e3a;
+}
+
+.christmas-submit-btn {
+  background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
+  color: white;
+  padding: 12px 32px;
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(196, 30, 58, 0.3);
+  font-size: 16px;
+}
+
+.christmas-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(196, 30, 58, 0.4);
+}
+
+.christmas-submit-btn:active {
+  transform: translateY(0);
+}
+
+/* Table Styles */
+.christmas-table-header {
+  background: linear-gradient(135deg, #165b33 0%, #0f3d22 100%);
+  color: white;
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.christmas-table-row {
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.christmas-table-row:hover {
+  background: #fff5f5;
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.15);
+}
+
+.christmas-search-box {
+  border: 2px solid #ffd700;
+  border-radius: 20px;
+  padding: 8px 16px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.christmas-search-box:focus-within {
+  border-color: #c41e3a;
+  box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
+}
+
+.christmas-search-input {
+  outline: none;
+  background: transparent;
+  border: none;
+  color: #333;
+}
+
+.christmas-delete-btn {
+  color: #c41e3a;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 20px;
+}
+
+.christmas-delete-btn:hover {
+  color: #8b0000;
+  transform: scale(1.2);
+}
+
+.christmas-status-select {
+  padding: 6px 12px;
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  background: white;
+  color: #165b33;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.christmas-status-select:focus {
+  outline: none;
+  border-color: #c41e3a;
+  box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
+}
+
+.christmas-order-card {
+  border: 3px solid #ffd700;
+  border-radius: 12px;
+  background: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.1);
+}
+
+.christmas-order-card:hover {
+  box-shadow: 0 6px 20px rgba(196, 30, 58, 0.2);
+  transform: translateY(-2px);
+}

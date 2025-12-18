@@ -1,11 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prata&display=swap');
+@import './components/ChristmasTheme.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Christmas Theme Colors */
+:root {
+  --christmas-red: #c41e3a;
+  --christmas-green: #165b33;
+  --christmas-gold: #ffd700;
+  --christmas-white: #f8f8f8;
+  --christmas-dark-red: #8b0000;
+  --christmas-light-green: #228b22;
+}
+
+body {
+  background: linear-gradient(135deg, #f8f8f8 0%, #ffe4e4 100%);
+}
+
 a.active hr {
   display: block;
+  background: var(--christmas-red) !important;
 }
 
 * {
@@ -25,7 +41,7 @@ a.active hr {
 
 @media (max-width: 640px) {
   a.active {
-    background: #000;
+    background: var(--christmas-red);
     color: #fff;
   }
 }

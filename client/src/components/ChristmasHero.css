@@ -1,0 +1,116 @@
+/* Christmas Hero Styles */
+.christmas-hero {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+  border: none;
+  border-top: 3px solid #ffd700;
+  border-bottom: 3px solid #ffd700;
+  border-radius: 0;
+  box-shadow: 0 8px 30px rgba(196, 30, 58, 0.2);
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  width: 100vw;
+}
+
+.christmas-hero::before {
+  content: '❄️';
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 50px;
+  opacity: 0.2;
+  animation: rotate-snowflake 10s linear infinite;
+  z-index: 0;
+}
+
+.christmas-hero::after {
+  content: '⭐';
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  font-size: 50px;
+  opacity: 0.2;
+  animation: twinkle-star 2s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes rotate-snowflake {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes twinkle-star {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.2);
+  }
+}
+
+.christmas-hero-text {
+  position: relative;
+  z-index: 2;
+}
+
+.christmas-hero-title {
+  color: #c41e3a;
+  text-shadow: 2px 2px 4px rgba(196, 30, 58, 0.2);
+  font-weight: 700;
+}
+
+.christmas-hero-subtitle {
+  color: #165b33;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.christmas-hero-line {
+  background: linear-gradient(90deg, #c41e3a 0%, #ffd700 100%);
+  height: 3px;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(196, 30, 58, 0.3);
+}
+
+.christmas-hero-cta {
+  color: #c41e3a;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.christmas-hero-cta:hover {
+  color: #8b0000;
+  transform: translateX(5px);
+}
+
+.christmas-hero-image {
+  position: relative;
+  z-index: 1;
+  border-left: 3px solid #ffd700;
+  max-height: 600px;
+  object-fit: cover;
+}
+
+/* Add padding to hero content */
+.christmas-hero .christmas-hero-text {
+  padding-left: max(20px, 5vw);
+  padding-right: max(20px, 5vw);
+}
+
+@media (max-width: 640px) {
+  .christmas-hero-image {
+    border-left: none;
+    border-top: 3px solid #ffd700;
+  }
+}

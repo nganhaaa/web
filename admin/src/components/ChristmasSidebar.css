@@ -1,0 +1,75 @@
+/* Christmas Sidebar Styles */
+.christmas-sidebar {
+  background: linear-gradient(180deg, #165b33 0%, #0f3d22 100%);
+  border-right: 4px solid #ffd700;
+  box-shadow: 4px 0 20px rgba(196, 30, 58, 0.2);
+  min-height: calc(100vh - 73px);
+  position: sticky;
+  top: 73px;
+  align-self: flex-start;
+}
+
+.christmas-sidebar-link {
+  color: white;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+}
+
+.christmas-sidebar-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.christmas-sidebar-link:hover::before {
+  left: 100%;
+}
+
+.christmas-sidebar-link:hover {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #ffd700;
+  transform: translateX(5px);
+}
+
+.christmas-sidebar-link.active {
+  background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
+  border-color: #ffd700;
+  box-shadow: 0 4px 15px rgba(196, 30, 58, 0.5);
+}
+
+.christmas-sidebar-link img {
+  filter: brightness(0) invert(1);
+}
+
+.christmas-sidebar-link.active img {
+  filter: brightness(0) invert(1) drop-shadow(0 0 5px #ffd700);
+}
+
+/* Christmas decorative elements */
+.christmas-sidebar::after {
+  content: '🎁';
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 30px;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+}

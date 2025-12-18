@@ -7,7 +7,10 @@ import OurPolicy from "../components/OurPolicy"
 const Home = () => {
   return (
     <div>
-      <Hero/>
+      {/* Hero full width - break out of container */}
+      <div className="-mx-4 sm:-mx-[5vw] md:-mx-[7vw] lg:-mx-[9vw]">
+        <Hero/>
+      </div>
       <LatestCollection/>
       <BestSeller/>
       <OurPolicy/>

@@ -4,6 +4,7 @@ import axios from 'axios'
 import {backendUrl} from '../App'
 import { toast } from "react-toastify"
 import BeatLoader from "react-spinners/BeatLoader";
+import '../components/ChristmasForm.css'
 
 
 const Add = ({token}) => {
@@ -71,23 +72,25 @@ const Add = ({token}) => {
   return (
     <>
       <form onSubmit={handleSubmit} className="flex flex-col w-full items-start gap-3 my-8">
+        <h2 className="christmas-form-title">🎁 Add New Product</h2>
+        
         <div>
-          <p className="mb-2 ">Upload Image</p>
+          <p className="christmas-label mb-2">Upload Image</p>
 
           <div className="flex gap-2">
-            <label htmlFor="image1">
+            <label htmlFor="image1" className="christmas-upload-area">
               <img className="w-20" src={!image1 ? assets.upload_area : URL.createObjectURL(image1)} alt="" />
               <input onChange={(e)=>setImage1(e.target.files[0])} type="file" id="image1" hidden/>
             </label>
-            <label htmlFor="image2">
+            <label htmlFor="image2" className="christmas-upload-area">
               <img className="w-20" src={!image2 ? assets.upload_area : URL.createObjectURL(image2)} alt="" />
               <input onChange={(e)=>setImage2(e.target.files[0])} type="file" id="image2" hidden/>
             </label>
-            <label htmlFor="image3">
+            <label htmlFor="image3" className="christmas-upload-area">
               <img className="w-20" src={!image3 ? assets.upload_area : URL.createObjectURL(image3)} alt="" />
               <input onChange={(e)=>setImage3(e.target.files[0])} type="file" id="image3" hidden/>
             </label>
-            <label htmlFor="image4">
+            <label htmlFor="image4" className="christmas-upload-area">
               <img className="w-20" src={!image4 ? assets.upload_area : URL.createObjectURL(image4)} alt="" />
               <input onChange={(e)=>setImage4(e.target.files[0])} type="file" id="image4" hidden/>
             </label>
@@ -95,59 +98,59 @@ const Add = ({token}) => {
         </div>
 
         <div className="w-full">
-          <p className="mb-2">Product name</p>
-          <input onChange={(e) => setName(e.target.value)} value={name} className="w-full max-w-[500px] px-3 py-2" type="text" placeholder="Type here" required/>
+          <p className="christmas-label mb-2">Product name</p>
+          <input onChange={(e) => setName(e.target.value)} value={name} className="christmas-input" type="text" placeholder="Type here" required/>
         </div>
 
         <div className="w-full">
-          <p className="mb-2">Product description</p>
-          <textarea onChange={(e) => setDescription(e.target.value)} value={description} className="w-full max-w-[500px] px-3 py-2" type="text" placeholder="Write content here" required/>
+          <p className="christmas-label mb-2">Product description</p>
+          <textarea onChange={(e) => setDescription(e.target.value)} value={description} className="christmas-textarea" type="text" placeholder="Write content here" required/>
         </div>
 
         <div className="flex flex-col sm:flex-row w-full gap-2 sm:gap-8">
           <div>
-            <p className="mb-2">Product category</p>
-            <select onChange={(e) => setCategory(e.target.value)} className="w-full px-3 py-2">
+            <p className="christmas-label mb-2">Product category</p>
+            <select onChange={(e) => setCategory(e.target.value)} className="christmas-select px-3 py-2">
               <option value="Men">Men</option>
               <option value="Women">Women</option>
               <option value="Kids">Kids</option>
             </select>
           </div>
           <div>
-            <p className="mb-2">Sub category</p>
-            <select onChange={(e) => setSubCategory(e.target.value)} className="w-full px-3 py-2">
+            <p className="christmas-label mb-2">Sub category</p>
+            <select onChange={(e) => setSubCategory(e.target.value)} className="christmas-select px-3 py-2">
               <option value="Topwear">Topwear</option>
               <option value="Bottomwear">Bottomwear</option>
               <option value="Winterwear">Winterwear</option>
             </select>
           </div>
           <div>
-            <p className="mb-2">Product price</p>
-            <input onChange={(e) => setPrice(e.target.value)} value={price} className="w-full px-3 py-2 sm:w-[120px]" type="number" placeholder="26" required />
+            <p className="christmas-label mb-2">Product price</p>
+            <input onChange={(e) => setPrice(e.target.value)} value={price} className="christmas-input sm:w-[120px]" type="number" placeholder="26" required />
           </div>
         </div>
 
         <div>
-          <p className="mb-2">Product Sizes</p>
+          <p className="christmas-label mb-2">Product Sizes</p>
           <div className="flex gap-2">
             <div onClick={() => setSizes(prev => prev.includes("S") ? prev.filter(item =>item !== "S") : [...prev,"S"])}>
-              <p className={`${sizes.includes("S") ? 'bg-pink-100' : 'bg-slate-200'} px-3 py-1 cursor-pointer`}>S</p>
+              <p className={`christmas-size-btn ${sizes.includes("S") ? 'active' : ''}`}>S</p>
             </div>
 
             <div onClick={() => setSizes(prev => prev.includes("M") ? prev.filter(item =>item !== "M") : [...prev,"M"])}>
-              <p className={`${sizes.includes("M") ? 'bg-pink-100' :'bg-slate-200'} px-3 py-1 cursor-pointer`}>M</p>
+              <p className={`christmas-size-btn ${sizes.includes("M") ? 'active' : ''}`}>M</p>
             </div>
 
             <div onClick={() => setSizes(prev => prev.includes("L") ? prev.filter(item =>item !== "L") : [...prev,"L"])}>
-              <p className={`${sizes.includes("L") ? 'bg-pink-100' : 'bg-slate-200'} px-3 py-1 cursor-pointer`}>L</p>
+              <p className={`christmas-size-btn ${sizes.includes("L") ? 'active' : ''}`}>L</p>
             </div>
 
             <div onClick={() => setSizes(prev => prev.includes("XL") ? prev.filter(item =>item !== "XL") : [...prev,"XL"])}>
-              <p className={`${sizes.includes("XL") ? 'bg-pink-100' : 'bg-slate-200'} px-3 py-1 cursor-pointer`}>XL</p>
+              <p className={`christmas-size-btn ${sizes.includes("XL") ? 'active' : ''}`}>XL</p>
             </div>
 
             <div onClick={() => setSizes(prev => prev.includes("XXL") ? prev.filter(item =>item !== "XXL") : [...prev,"XXL"])}>
-              <p className={`${sizes.includes("XXL") ? 'bg-pink-100' : 'bg-slate-200'} px-3 py-1 cursor-pointer`}>XXL</p>
+              <p className={`christmas-size-btn ${sizes.includes("XXL") ? 'active' : ''}`}>XXL</p>
             </div>
           </div>
         </div>
@@ -157,7 +160,7 @@ const Add = ({token}) => {
           <label className="cursor-pointer" htmlFor="bestseller">Add to bestseller</label>
         </div> */}
 
-        <button type="submit" className="bg-black text-white w-28 mt-4 py-3 rounded-sm">ADD</button>
+        <button type="submit" className="christmas-submit-btn">ADD ➕</button>
       </form>
 
       <BeatLoader

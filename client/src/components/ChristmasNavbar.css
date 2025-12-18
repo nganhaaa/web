@@ -1,0 +1,94 @@
+/* Christmas Navbar Theme */
+.christmas-navbar {
+  background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
+  box-shadow: 0 4px 20px rgba(196, 30, 58, 0.3);
+  border-bottom: 3px solid #ffd700;
+  position: relative;
+  z-index: 100;
+  width: 100%;
+  padding-left: max(60px, 5vw);
+  padding-right: max(60px, 5vw);
+}
+
+.christmas-navbar::before {
+  content: '🎄';
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 28px;
+  animation: twinkle 2s ease-in-out infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.christmas-navbar::after {
+  content: '🎄';
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 28px;
+  animation: twinkle 2s ease-in-out infinite 1s;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Responsive: hide emojis on small screens */
+@media (max-width: 640px) {
+  .christmas-navbar::before,
+  .christmas-navbar::after {
+    display: none;
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateY(-50%) scale(1.1);
+  }
+}
+
+.christmas-nav-link {
+  color: white !important;
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.christmas-nav-link:hover {
+  color: #ffd700 !important;
+  transform: translateY(-2px);
+}
+
+.christmas-nav-link.active {
+  color: #ffd700 !important;
+}
+
+.christmas-nav-link.active hr {
+  background: #ffd700 !important;
+  height: 2px !important;
+  box-shadow: 0 0 10px #ffd700;
+}
+
+.christmas-icon {
+  filter: brightness(0) invert(1);
+  transition: all 0.3s ease;
+}
+
+.christmas-icon:hover {
+  filter: brightness(0) invert(1) drop-shadow(0 0 8px #ffd700);
+  transform: scale(1.1);
+}
+
+.christmas-cart-badge {
+  background: #ffd700 !important;
+  color: #c41e3a !important;
+  font-weight: bold;
+  border: 2px solid white;
+}

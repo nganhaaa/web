@@ -5,6 +5,7 @@ import { assets } from '../assets/assets';
 import { ShopContext } from '../context/ShopContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import '../components/ChristmasTheme.css';
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState('cod');
@@ -109,7 +110,7 @@ const PlaceOrder = () => {
       {/* ------------- Left Side ---------------- */}
       <div className="flex flex-col gap-4 w-full sm:max-w-[600px]">
         <div className="text-xl sm:text-2xl my-3">
-          <Title text1={'DELIVERY'} text2={'INFORMATION'} />
+          <Title text1={'DELIVERY'} text2={'INFORMATION 📦'} />
         </div>
         <div className="flex gap-3">
           <input
@@ -117,9 +118,9 @@ const PlaceOrder = () => {
             onChange={onChangeHandler}
             name="name"
             value={formData.name}
-            className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
+            className="christmas-input w-full"
             type="text"
-            placeholder="Name"
+            placeholder="Full Name"
           />
         </div>
         <input
@@ -127,18 +128,18 @@ const PlaceOrder = () => {
           onChange={onChangeHandler}
           name="email"
           value={formData.email}
-          className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
+          className="christmas-input w-full"
           type="email"
-          placeholder="Email"
+          placeholder="Email Address"
         />
         <input
           required
           onChange={onChangeHandler}
           name="address"
           value={formData.address}
-          className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
+          className="christmas-input w-full"
           type="text"
-          placeholder="Address"
+          placeholder="Delivery Address"
         />
       
         <div>
@@ -147,11 +148,11 @@ const PlaceOrder = () => {
             onChange={onChangeHandler}
             name="phone"
             value={formData.phone}
-            className={`border ${phoneError ? 'border-red-500' : 'border-gray-300'} rounded py-1.5 px-3.5 w-full`}
+            className={`christmas-input w-full ${phoneError ? 'border-red-500' : ''}`}
             type="number"
-            placeholder="Phone"
+            placeholder="Phone Number"
           />
-          {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
+          {phoneError && <p className="text-red-500 text-sm mt-1">❌ {phoneError}</p>}
         </div>
       </div>
 
@@ -162,22 +163,22 @@ const PlaceOrder = () => {
         </div>
 
         <div className="mt-12">
-          <Title text1={'PAYMENT'} text2={'METHOD'} />
+          <Title text1={'PAYMENT'} text2={'METHOD 💳'} />
           {/* --------------- Payment Method Selection ------------- */}
           <div className="flex gap-3 flex-col lg:flex-row">
-            <div onClick={() => setMethod('momo')} className="flex items-center gap-3 border p-2 px-3 cursor-pointer">
-              <p className={`min-w-3.5 h-3.5 border rounded-full ${method === 'momo' ? 'bg-green-400' : ''}`}></p>
+            <div onClick={() => setMethod('momo')} className={`flex items-center gap-3 border-2 p-2 px-3 cursor-pointer rounded-lg transition ${method === 'momo' ? 'border-red-600 bg-red-50' : 'border-gold-400'}`}>
+              <p className={`min-w-3.5 h-3.5 border-2 rounded-full ${method === 'momo' ? 'bg-red-600 border-red-600' : 'border-gray-400'}`}></p>
               <img className="h-10 mx-4" src={assets.momo_payment2} alt="" />
             </div>
-            <div onClick={() => setMethod('cod')} className="flex items-center gap-3 border p-5 sm:p-2 px-3 cursor-pointer">
-              <p className={`min-w-3.5 h-3.5 border rounded-full ${method === 'cod' ? 'bg-green-400' : ''}`}></p>
-              <p className="text-gray-500 text-sm font-medium mx-5">CASH ON DELIVERY</p>
+            <div onClick={() => setMethod('cod')} className={`flex items-center gap-3 border-2 p-5 sm:p-2 px-3 cursor-pointer rounded-lg transition ${method === 'cod' ? 'border-red-600 bg-red-50' : 'border-gold-400'}`}>
+              <p className={`min-w-3.5 h-3.5 border-2 rounded-full ${method === 'cod' ? 'bg-red-600 border-red-600' : 'border-gray-400'}`}></p>
+              <p className="text-gray-700 text-sm font-medium mx-5">💵 CASH ON DELIVERY</p>
             </div>
           </div>
 
           <div className="w-full text-end mt-8">
-            <button type="submit" className="bg-black text-white px-16 py-3 text-sm">
-              PLACE ORDER
+            <button type="submit" className="christmas-btn-primary w-full sm:w-auto px-16 py-3">
+              PLACE ORDER 🎁
             </button>
           </div>
         </div>

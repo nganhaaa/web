@@ -4,6 +4,7 @@ import {backendUrl, currency} from '../App'
 import { toast } from 'react-toastify';
 import { assets } from '../assets/assets';
 import Pagination from '../components/Pagination';
+import '../components/ChristmasForm.css';
 
 const Orders = ({token}) => {
   const [orders, setOrders] = useState([]);
@@ -87,15 +88,15 @@ const Orders = ({token}) => {
   return (
     <div className="my-8">
       <div className="flex flex-col sm:flex-row gap-2 justify-between items-center mb-4">
-        <h3>Order List</h3>
+        <h2 className="christmas-form-title">🛒 Order List</h2>
         <div>
-          <div className="inline-flex items-center justify-center border border-gray-400 px-5 py-2 rounded-full">
+          <div className="christmas-search-box inline-flex items-center justify-center">
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 outline-none bg-inherit text-sm border-none"
+              className="christmas-search-input flex-1 text-sm"
               type="text"
-              placeholder="Search"
+              placeholder="Search orders..."
             />
             <img className="w-4" src={assets.search_icon} alt="" />
           </div>
@@ -105,7 +106,7 @@ const Orders = ({token}) => {
       <div>
         {currentOrders.map((order, index) => (
           <div
-            className="grid grid-cols-1 sm:grid-cols-[0.5fr_2fr_1fr] lg:grid-cols-[0.5fr_2fr_1fr_1fr_1fr] gap-3 items-start border-2 border-gray-200 p-5 md:p-8 my-3 md:my-4 text-xs sm:text-sm text-gray-700"
+            className="christmas-order-card grid grid-cols-1 sm:grid-cols-[0.5fr_2fr_1fr] lg:grid-cols-[0.5fr_2fr_1fr_1fr_1fr] gap-3 items-start p-5 md:p-8 my-3 md:my-4 text-xs sm:text-sm text-gray-700"
             key={index}
           >
             <img className="w-12" src={assets.parcel_icon} alt="" />
@@ -141,14 +142,14 @@ const Orders = ({token}) => {
               <p>Payment: {order.payment ? "Done" : "Pending"}</p>
               <p>Date: {new Date(order.date).toLocaleDateString()}</p>
             </div>
-            <p className="text-sm sm:text-base">
+            <p className="text-sm sm:text-base font-semibold">
               {currency}
               {order.amount}
             </p>
             <select
               onChange={(e) => handleStatus(e, order._id)}
               value={order.status}
-              className="p-2 font-semibold"
+              className="christmas-status-select"
             >
               <option value="Order Placed">Order Placed</option>
               <option value="Packing">Packing</option>
