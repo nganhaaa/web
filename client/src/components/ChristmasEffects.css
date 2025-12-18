@@ -1,5 +1,5 @@
 .christmas-effects {
-    pointer-events: none;
+    pointer-events: none; /* Vô hiệu hóa cho toàn bộ container */
     position: fixed;
     top: 0;
     left: 0;
@@ -16,6 +16,7 @@
     height: 100%;
     top: 0;
     left: 0;
+    pointer-events: none; /* Tuyết không block hover */
 }
 
 .snowflake {
@@ -48,6 +49,7 @@
     height: 100%;
     top: 0;
     left: 0;
+    pointer-events: none; /* Container không block */
 }
 
 .santa-sleigh-gif {
@@ -56,6 +58,12 @@
     right: -400px;
     animation: flySleigh 25s linear infinite;
     z-index: 9998;
+    pointer-events: auto; /* Cho phép hover vào Santa */
+    transition: transform 0.3s ease;
+}
+
+.santa-sleigh-gif:hover {
+    transform: scale(1.1); /* Phóng to khi hover */
 }
 
 .santa-sleigh-gif img {
