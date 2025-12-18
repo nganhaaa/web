@@ -4,6 +4,7 @@ import './ChristmasEffects.css';
 
 const ChristmasEffects = () => {
     const [snowflakes, setSnowflakes] = useState([]);
+    const [gifts, setGifts] = useState([]);
     const audioRef = useRef(null);
     const bgMusicRef = useRef(null);
 
@@ -78,6 +79,22 @@ const ChristmasEffects = () => {
                     alert('Không thể phát âm thanh. Vui lòng click vào trang trước!');
                 });
         }
+        
+        // Tạo quà rơi với vị trí ngẫu nhiên trên màn hình (3-4 món quà)
+        const giftCount = 3 + Math.floor(Math.random() * 2);
+        const newGifts = Array.from({ length: giftCount }, (_, i) => ({
+            id: Date.now() + i,
+            left: 5 + Math.random() * 90, // Ngẫu nhiên từ 5% đến 95%
+            emoji: ['🎁', '🎀', '🎄', '⭐'][Math.floor(Math.random() * 4)],
+            animationDuration: 2 + Math.random() * 1.5, // Tốc độ rơi cũng ngẫu nhiên hơn
+            delay: Math.random() * 0.3 // Thêm delay ngẫu nhiên để rơi không cùng lúc
+        }));
+        setGifts(prev => [...prev, ...newGifts]);
+        
+        // Xóa quà sau khi rơi xong
+        setTimeout(() => {
+            setGifts(prev => prev.filter(g => !newGifts.find(ng => ng.id === g.id)));
+        }, 4000);
     };
 
     const handleReindeerLeave = () => {
@@ -126,6 +143,23 @@ const ChristmasEffects = () => {
                 >
                     <img src={santaSleighGif} alt="Santa Sleigh with Reindeer" />
                 </div>
+            </div>
+
+            {/* Quà rơi khi hover */}
+            <div className="gifts-container">
+                {gifts.map((gift) => (
+                    <div
+                        key={gift.id}
+                        className="falling-gift"
+                        style={{
+                            left: `${gift.left}%`,
+                            animationDuration: `${gift.animationDuration}s`,
+                            animationDelay: `${gift.delay}s`
+                        }}
+                    >
+                        {gift.emoji}
+                    </div>
+                ))}
             </div>
         </div>
     );
