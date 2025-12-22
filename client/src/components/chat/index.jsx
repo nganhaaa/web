@@ -154,35 +154,48 @@ const ChatBox = () => {
           // Nội dung chat khi đã đăng nhập
           <>
             <div className="flex flex-col h-[82%] sm:h-[78%] p-4 overflow-y-auto gap-2" ref={messagesContainerRef}>
-              {messages.map((msg, idx) => (
-                <div
-                  key={idx}
-                  className={`mb-1 flex ${
-                    msg.sender === userId
-                      ? "justify-end"
-                      : "justify-start"
-                  }`}
-                >
+              {messages.map((msg, idx) => {
+                const isBot = msg.sender === 'bot' || msg.sender === 'admin';
+                const isUser = msg.sender === userId;
+                
+                return (
                   <div
-                    className={`${
-                      msg.sender === userId
-                        ? "bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg"
-                        : "bg-gradient-to-r from-green-100 to-green-200 text-gray-800 shadow-md"
-                    } text-base p-3 rounded-2xl max-w-[70%] break-words relative`}
+                    key={idx}
+                    className={`mb-1 flex ${
+                      isUser ? "justify-end" : "justify-start"
+                    }`}
                   >
-                    {msg.sender !== userId && (
-                      <span className="absolute -left-2 -top-2 text-xl">🎁</span>
-                    )}
-                    {msg.sender === userId && (
-                      <span className="absolute -right-2 -top-2 text-xl">🎄</span>
-                    )}
-                    <p>{msg.message}</p>
-                    <span className={`text-xs ${msg.sender === userId ? 'text-red-200' : 'text-green-600'} block mt-1`}>
-                      {moment(msg.timestamp).format("HH:mm DD-MM")}
-                    </span>
+                    <div
+                      className={`${
+                        isUser
+                          ? "bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg"
+                          : msg.sender === 'bot'
+                          ? "bg-gradient-to-r from-blue-100 to-blue-200 text-gray-800 shadow-md border-2 border-blue-300"
+                          : "bg-gradient-to-r from-green-100 to-green-200 text-gray-800 shadow-md"
+                      } text-base p-3 rounded-2xl max-w-[70%] break-words relative`}
+                    >
+                      {!isUser && (
+                        <span className="absolute -left-2 -top-2 text-xl">
+                          {msg.sender === 'bot' ? '🤖' : '🎁'}
+                        </span>
+                      )}
+                      {isUser && (
+                        <span className="absolute -right-2 -top-2 text-xl">🎄</span>
+                      )}
+                      {msg.sender === 'bot' && (
+                        <div className="text-xs font-bold text-blue-600 mb-1">AI Bot 🤖</div>
+                      )}
+                      <p>{msg.message}</p>
+                      <span className={`text-xs ${
+                        isUser ? 'text-red-200' : 
+                        msg.sender === 'bot' ? 'text-blue-600' : 'text-green-600'
+                      } block mt-1`}>
+                        {moment(msg.timestamp).format("HH:mm DD-MM")}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
               <div ref={messageEndRef} />
             </div>
 
