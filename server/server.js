@@ -5,6 +5,7 @@ import http from 'http';
 import { Server } from 'socket.io';
 import connectDB from './config/mongodb.js';
 import connectCloudinary from './config/cloudinary.js';
+import initializeAdmin from './config/initAdmin.js';
 import userRouter from './routes/userRoute.js';
 import productRouter from './routes/productRoute.js';
 import cartRouter from './routes/cartRoute.js';
@@ -34,6 +35,11 @@ const io = new Server(server,
 // Connect to MongoDB and Cloudinary
 connectDB();
 connectCloudinary();
+
+// Initialize admin if not exists
+connectDB().then(() => {
+    initializeAdmin();
+});
 
 // Middlewares
 app.use(cors());

@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
+import adminModel from '../models/adminModel.js';
 
-const adminAuth = (req, res, next) => {
+const adminAuth = async (req, res, next) => {
     try {
         const { token } = req.headers;
         if (!token) {
@@ -8,9 +9,15 @@ const adminAuth = (req, res, next) => {
         }
 
         const token_decode = jwt.verify(token, process.env.JWT_SECRET);
-        if (token_decode !== process.env.ADMIN_EMAIL + process.env.ADMIN_PASSWORD) {
-            return res.json({success: false, message: 'Not authorized Login Again'});
+        
+        // Tìm admin theo ID từ token
+        const admin = await adminModel.findById(token_decode.id);
+        
+        if (!admin || !admin.isActive) {
+            return res.json({success: false, message: 'Not authorized - Admin access required'});
         }
+        
+        req.admin = admin; // Attach admin info to request
         next();
     } catch (error) {
         console.log(error);
