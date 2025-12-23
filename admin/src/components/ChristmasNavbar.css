@@ -7,7 +7,7 @@
 }
 
 .christmas-navbar::before {
-  content: '🎄';
+  content: '';
   position: absolute;
   left: 10px;
   top: 50%;

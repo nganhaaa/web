@@ -70,7 +70,7 @@
 }
 
 .christmas-title::after {
-  content: '🎄';
+  content: '';
   margin-left: 10px;
   animation: sway 2s ease-in-out infinite;
 }

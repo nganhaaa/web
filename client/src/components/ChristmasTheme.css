@@ -30,7 +30,7 @@
 }
 
 .christmas-title::before {
-  content: '🎄';
+  content: '';
   position: absolute;
   left: -35px;
   top: 50%;

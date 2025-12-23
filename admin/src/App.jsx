@@ -11,6 +11,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Chat from "./pages/Chat"
 import Revenue from "./pages/Revenue"
+import Vouchers from "./pages/Vouchers"
 import ChristmasEffects from "./components/ChristmasEffects"
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -44,6 +45,7 @@ const App = () => {
               <Route path="/list" element={<List token={token} />}/>
               <Route path="/orders" element={<Orders token={token} />}/>
               <Route path="/chat" element={<Chat token={token} />}/>
+              <Route path="/vouchers" element={<Vouchers token={token} />}/>
             </Routes>
           </div>
         </div>

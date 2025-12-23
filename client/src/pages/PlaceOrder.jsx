@@ -10,7 +10,7 @@ import '../components/ChristmasTheme.css';
 const PlaceOrder = () => {
   const [method, setMethod] = useState('cod');
   const [phoneError, setPhoneError] = useState('');
-  const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products } =
+  const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products, appliedVoucher } =
     useContext(ShopContext);
   const [formData, setFormData] = useState({
     name: '',
@@ -62,10 +62,15 @@ const PlaceOrder = () => {
         }
       }
 
+      const discount = appliedVoucher ? appliedVoucher.discount : 0;
+      const voucherId = appliedVoucher ? appliedVoucher._id : null;
+
       let orderData = {
         address: formData,
         items: orderItems,
         amount: getCartAmount() + delivery_fee,
+        discount: discount,
+        voucherId: voucherId
       };
 
       switch (method) {
@@ -159,7 +164,11 @@ const PlaceOrder = () => {
       {/* ------------- Right Side ------------------ */}
       <div className="mt-8">
         <div className="mt-8 min-w-90">
-          <CartTotal />
+          <CartTotal 
+            subtotal={getCartAmount()}
+            discount={appliedVoucher ? appliedVoucher.discount : 0}
+            appliedVoucher={appliedVoucher}
+          />
         </div>
 
         <div className="mt-12">

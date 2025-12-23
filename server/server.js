@@ -13,6 +13,8 @@ import favouriteListRouter from './routes/favouriteListRouter.js';
 import revenueRouter from './routes/revenueRoute.js';
 import chatRouter from './routes/chatRoute.js';
 import reviewRouter from './routes/reviewRoute.js';
+import voucherRouter from './routes/voucherRoute.js';
+import spinRouter from './routes/spinRoutes.js';
 import { handleConnection } from './controllers/chatController.js';
 import { generalLimiter, authLimiter, orderLimiter } from './middleware/rateLimiter.js';
 import { sanitizeInput, cleanXSS, securityHeaders } from './middleware/sanitizer.js';
@@ -49,10 +51,6 @@ app.use(cors());
 app.use(express.json());
 
 // API Endpoints
-app.post('/api/users/login', authLimiter, loginUser);
-app.post('/api/users/register', authLimiter, registerUser);
-app.post('/api/users/admin', authLimiter, loginAdmin);
-
 app.use('/api/users', userRouter);
 app.use('/api/product', productRouter);
 app.use('/api/cart', cartRouter);
@@ -60,7 +58,9 @@ app.use('/api/favourite', favouriteListRouter);
 app.use('/api/order', orderLimiter, orderRouter);
 app.use('/api/revenue', revenueRouter);
 app.use('/api/chat', chatRouter);
+app.use('/api/voucher', voucherRouter);
 app.use('/api/review', reviewRouter);
+app.use('/api/spin', spinRouter);
 
 // WebSocket Connection
 io.on('connection', (socket) => handleConnection(socket, io));
