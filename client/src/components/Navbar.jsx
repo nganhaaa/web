@@ -37,6 +37,9 @@ const Navbar = () => {
         <NavLink to="/contact" className="christmas-nav-link">
           <p>CONTACT</p>
         </NavLink>
+        <NavLink to="/livestream" className="christmas-nav-link">
+          <p>LIVESTREAM</p>
+        </NavLink>
       </ul>
 
       <div className="flex items-center gap-5" style={{ zIndex: 10, position: 'relative' }}>
@@ -113,6 +116,9 @@ const Navbar = () => {
           </NavLink>
           <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/contact">
             Contact
+          </NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/livestream">
+            Livestream
           </NavLink>
         </div>
       </div>

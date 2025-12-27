@@ -15,6 +15,7 @@ import revenueRouter from './routes/revenueRoute.js';
 import chatRouter from './routes/chatRoute.js';
 import reviewRouter from './routes/reviewRoute.js';
 import { handleConnection } from './controllers/chatController.js';
+import { handleLivestreamConnection } from './controllers/livestreamController.js';
 
 // App Config
 const app = express();
@@ -56,7 +57,10 @@ app.use('/api/chat', chatRouter);
 app.use('/api/review', reviewRouter);
 
 // WebSocket Connection
-io.on('connection', (socket) => handleConnection(socket, io));
+io.on('connection', (socket) => {
+  handleConnection(socket, io); // chat
+  handleLivestreamConnection(socket, io); // livestream
+});
 
 // Start Server
 server.listen(port, () => {

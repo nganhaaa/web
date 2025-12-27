@@ -17,6 +17,7 @@ import Reviews from './pages/Reviews'
 import ChatBox from './components/chat'
 import SearchBar from './components/SearchBar'
 import ChristmasEffects from './components/ChristmasEffects'
+import Livestream from './pages/Livestream'
 
 const App = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
           <Route path="/place-order" element={<PlaceOrder />} />
           <Route path="/favourite" element={<Favourite />} />
           <Route path="/reviews" element={<Reviews />} />
+          <Route path="/livestream" element={<Livestream />} />
         </Routes>
         <ChatBox />
       </div>
