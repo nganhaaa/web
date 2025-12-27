@@ -16,7 +16,8 @@
 }
 
 body {
-  background: linear-gradient(135deg, #f8f8f8 0%, #ffe4e4 100%);
+  background: linear-gradient(180deg, #fff5f5 0%, #ffffff 30%, #ffffff 100%);
+  min-height: 100vh;
 }
 
 a.active hr {
