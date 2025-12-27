@@ -16,6 +16,7 @@ const ShopContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [token, setToken] = useState('');
   const [userId, setUserId] = useState('');
+  const [appliedVoucher, setAppliedVoucher] = useState(null);
   const navigate = useNavigate();
 
   const addToCart = async (itemId, size) => {
@@ -314,7 +315,9 @@ const ShopContextProvider = (props) => {
     getOrderUser,
     deleteFavorite,
     userId,
-    setUserId
+    setUserId,
+    appliedVoucher,
+    setAppliedVoucher
   };
 
   return <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>;

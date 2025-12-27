@@ -11,7 +11,7 @@
 }
 
 .christmas-navbar::before {
-  content: '🎄';
+  content: '';
   position: absolute;
   left: 15px;
   top: 50%;
@@ -23,7 +23,7 @@
 }
 
 .christmas-navbar::after {
-  content: '🎄';
+  content: '';
   position: absolute;
   right: 5px;
   top: 50%;
