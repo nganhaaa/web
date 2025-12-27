@@ -11,6 +11,7 @@ const Collection = () => {
   const [filterProducts, setFilterProducts] = useState([]);
   const [category, setCategory] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
+  const [priceRange, setPriceRange] = useState([]);
   const [sortType, setSortType] = useState('relavent');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
@@ -31,6 +32,14 @@ const Collection = () => {
     }
   };
 
+  const togglePriceRange = (e) => {
+    if (priceRange.includes(e.target.value)) {
+      setPriceRange((prev) => prev.filter((item) => item !== e.target.value));
+    } else {
+      setPriceRange((prev) => [...prev, e.target.value]);
+    }
+  };
+
   const applyFilter = () => {
     let productsCopy = products.slice();
 
@@ -44,6 +53,28 @@ const Collection = () => {
 
     if (subCategory.length > 0) {
       productsCopy = productsCopy.filter((item) => subCategory.includes(item.subCategory));
+    }
+
+    if (priceRange.length > 0) {
+      productsCopy = productsCopy.filter((item) => {
+        return priceRange.some((range) => {
+          const price = item.price;
+          switch (range) {
+            case 'under-50':
+              return price < 50;
+            case '50-100':
+              return price >= 50 && price <= 100;
+            case '100-200':
+              return price > 100 && price <= 200;
+            case '200-500':
+              return price > 200 && price <= 500;
+            case 'above-500':
+              return price > 500;
+            default:
+              return true;
+          }
+        });
+      });
     }
 
     setFilterProducts(productsCopy);
@@ -70,7 +101,7 @@ const Collection = () => {
   useEffect(() => {
     applyFilter();
     setCurrentPage(1);
-  }, [category, subCategory, search, showSearch, products]);
+  }, [category, subCategory, priceRange, search, showSearch, products]);
 
   useEffect(() => {
     sortProduct();
@@ -175,6 +206,61 @@ const Collection = () => {
                 onChange={toggleSubCategory}
               />{" "}
               Winterwear
+            </p>
+          </div>
+        </div>
+        {/* Price Range Filter */}
+        <div
+          className={`border border-gray-300 pl-5 py-3 my-5 ${
+            showFilter ? "" : "hidden"
+          } sm:block`}
+        >
+          <p className="mb-3 text-sm font-medium">PRICE RANGE</p>
+          <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
+            <p className="flex gap-2">
+              <input
+                className="w-3"
+                type="checkbox"
+                value={"under-50"}
+                onChange={togglePriceRange}
+              />{" "}
+              Under $50
+            </p>
+            <p className="flex gap-2">
+              <input
+                className="w-3"
+                type="checkbox"
+                value={"50-100"}
+                onChange={togglePriceRange}
+              />{" "}
+              $50 - $100
+            </p>
+            <p className="flex gap-2">
+              <input
+                className="w-3"
+                type="checkbox"
+                value={"100-200"}
+                onChange={togglePriceRange}
+              />{" "}
+              $100 - $200
+            </p>
+            <p className="flex gap-2">
+              <input
+                className="w-3"
+                type="checkbox"
+                value={"200-500"}
+                onChange={togglePriceRange}
+              />{" "}
+              $200 - $500
+            </p>
+            <p className="flex gap-2">
+              <input
+                className="w-3"
+                type="checkbox"
+                value={"above-500"}
+                onChange={togglePriceRange}
+              />{" "}
+              Above $500
             </p>
           </div>
         </div>

@@ -83,6 +83,42 @@ const updateStatus = async (req, res) => {
     try {
         const { orderId, status } = req.body;
 
+        // Lấy order hiện tại
+        const currentOrder = await orderModel.findById(orderId);
+        if (!currentOrder) {
+            return res.json({ success: false, message: 'Order not found' });
+        }
+
+        // Định nghĩa thứ tự status progression
+        const statusOrder = ['Order Placed', 'Packing', 'Shipped', 'Out for delivery', 'Delivered'];
+        const currentStatusIndex = statusOrder.indexOf(currentOrder.status);
+        const newStatusIndex = statusOrder.indexOf(status);
+
+        // Kiểm tra nếu order đã bị hủy hoặc đã giao hàng, không cho update
+        if (currentOrder.status === 'Cancelled') {
+            return res.json({ success: false, message: 'Cannot update cancelled order' });
+        }
+
+        if (currentOrder.status === 'Delivered' && status !== 'Delivered') {
+            return res.json({ success: false, message: 'Cannot change status of delivered order' });
+        }
+
+        // Nếu status mới là Cancelled, cho phép từ bất kỳ status nào (trừ Delivered)
+        if (status === 'Cancelled') {
+            if (currentOrder.status === 'Delivered') {
+                return res.json({ success: false, message: 'Cannot cancel delivered order' });
+            }
+            await orderModel.findByIdAndUpdate(orderId, { status });
+            return res.json({ success: true, message: 'Order cancelled' });
+        }
+
+        // Kiểm tra không cho quay lại status trước
+        if (currentStatusIndex !== -1 && newStatusIndex !== -1) {
+            if (newStatusIndex < currentStatusIndex) {
+                return res.json({ success: false, message: 'Cannot revert to previous status' });
+            }
+        }
+
         await orderModel.findByIdAndUpdate(orderId, { status });
         res.json({ success: true, message: 'Status Updated' });
 

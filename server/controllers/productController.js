@@ -92,9 +92,65 @@ const singleProduct = async (req, res) => {
 };
 
 
+// function for update product
+const updateProduct = async (req, res) => {
+    try {
+        const { id, name, description, price, category, subCategory, sizes, bestseller } = req.body;
+
+        // Tìm sản phẩm hiện tại
+        const existingProduct = await productModel.findById(id);
+        if (!existingProduct) {
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
+        // Bắt đầu với ảnh cũ
+        let imagesUrl = [...existingProduct.image];
+
+        // Upload và thay thế từng ảnh mới tại vị trí tương ứng
+        if (req.files.image1 && req.files.image1[0]) {
+            const result = await cloudinary.uploader.upload(req.files.image1[0].path, { resource_type: 'image' });
+            imagesUrl[0] = result.secure_url;
+        }
+        if (req.files.image2 && req.files.image2[0]) {
+            const result = await cloudinary.uploader.upload(req.files.image2[0].path, { resource_type: 'image' });
+            imagesUrl[1] = result.secure_url;
+        }
+        if (req.files.image3 && req.files.image3[0]) {
+            const result = await cloudinary.uploader.upload(req.files.image3[0].path, { resource_type: 'image' });
+            imagesUrl[2] = result.secure_url;
+        }
+        if (req.files.image4 && req.files.image4[0]) {
+            const result = await cloudinary.uploader.upload(req.files.image4[0].path, { resource_type: 'image' });
+            imagesUrl[3] = result.secure_url;
+        }
+
+        // Cập nhật dữ liệu sản phẩm
+        const updatedData = {
+            name,
+            description,
+            category,
+            price: Number(price),
+            subCategory,
+            bestseller: bestseller === "true",
+            sizes: JSON.parse(sizes),
+            image: imagesUrl,
+        };
+
+        // Cập nhật sản phẩm trong database
+        const updatedProduct = await productModel.findByIdAndUpdate(id, updatedData, { new: true });
+
+        res.json({ success: true, message: "Product Updated", product: updatedProduct });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+
 export {
     addProduct,
     listProducts,
     removeProduct,
-    singleProduct
+    singleProduct,
+    updateProduct
 };

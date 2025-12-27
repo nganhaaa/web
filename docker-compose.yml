@@ -60,7 +60,7 @@ services:
       context: ./client
       dockerfile: Dockerfile
       args:
-        VITE_BACKEND_URL: http://localhost:80
+        VITE_BACKEND_URL: ""
     container_name: client-frontend
     restart: unless-stopped
     ports:
@@ -77,7 +77,7 @@ services:
       context: ./admin
       dockerfile: Dockerfile
       args:
-        VITE_BACKEND_URL: http://localhost:81
+        VITE_BACKEND_URL: ""
     container_name: admin-frontend
     restart: unless-stopped
     ports:

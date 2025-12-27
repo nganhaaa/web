@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom"
 import List from "./pages/List"
 import Orders from "./pages/Orders"
 import Add from "./pages/Add"
+import Edit from "./pages/Edit"
 import { useEffect, useState } from "react"
 import Login from "./components/Login"
 
@@ -43,6 +44,7 @@ const App = () => {
               <Route path="/" element={<Revenue token={token} />}/>
               <Route path="/add" element={<Add token={token} />}/>
               <Route path="/list" element={<List token={token} />}/>
+              <Route path="/edit/:id" element={<Edit token={token} />}/>
               <Route path="/orders" element={<Orders token={token} />}/>
               <Route path="/chat" element={<Chat token={token} />}/>
               <Route path="/vouchers" element={<Vouchers token={token} />}/>
