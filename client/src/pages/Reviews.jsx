@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { assets } from '../assets/assets';
 import { useNavigate } from 'react-router-dom';
 import Title from '../components/Title';
+import { getReviewVideo } from '../utils/imageOptimizer';
 
 const Reviews = () => {
   const { backendUrl, token, currency } = useContext(ShopContext);
@@ -20,7 +21,9 @@ const Reviews = () => {
     rating: 5,
     comment: '',
     images: [],
-    existingImages: [] // For edit mode - existing images from server
+    existingImages: [], // For edit mode - existing images from server
+    videos: [],
+    existingVideos: [] // For edit mode - existing videos from server
   });
 
   // Fetch pending reviews
@@ -70,8 +73,11 @@ const Reviews = () => {
         formData.append('rating', reviewData.rating);
         formData.append('comment', reviewData.comment);
         
-        // Append only new images
+        // Append only new images and videos
         reviewData.images.forEach((file) => {
+          formData.append('images', file);
+        });
+        reviewData.videos.forEach((file) => {
           formData.append('images', file);
         });
 
@@ -86,7 +92,7 @@ const Reviews = () => {
           setShowReviewForm(false);
           setEditingReview(null);
           setSelectedProduct(null);
-          setReviewData({ rating: 5, comment: '', images: [], existingImages: [] });
+          setReviewData({ rating: 5, comment: '', images: [], existingImages: [], videos: [], existingVideos: [] });
           fetchUserReviews();
         } else {
           toast.error(response.data.message);
@@ -101,6 +107,9 @@ const Reviews = () => {
         reviewData.images.forEach((file) => {
           formData.append('images', file);
         });
+        reviewData.videos.forEach((file) => {
+          formData.append('images', file);
+        });
 
         const response = await axios.post(`${backendUrl}/api/review/add`, formData, {
           headers: { token }
@@ -110,7 +119,7 @@ const Reviews = () => {
           toast.success('Review submitted successfully!');
           setShowReviewForm(false);
           setSelectedProduct(null);
-          setReviewData({ rating: 5, comment: '', images: [], existingImages: [] });
+          setReviewData({ rating: 5, comment: '', images: [], existingImages: [], videos: [], existingVideos: [] });
           fetchPendingReviews();
           fetchUserReviews();
         } else {
@@ -161,7 +170,9 @@ const Reviews = () => {
       rating: review.rating,
       comment: review.comment || '',
       images: [],
-      existingImages: review.images || []
+      existingImages: review.images || [],
+      videos: [],
+      existingVideos: review.videos || []
     });
     setShowReviewForm(true);
   };
@@ -209,6 +220,61 @@ const Reviews = () => {
     const newImages = [...reviewData.images];
     newImages.splice(index, 1);
     setReviewData({ ...reviewData, images: newImages });
+  };
+
+  // Handle video upload with size validation
+  const handleVideoChange = (e) => {
+    const files = Array.from(e.target.files);
+    const totalVideos = reviewData.videos.length + reviewData.existingVideos.length;
+    
+    if (files.length + totalVideos > 2) {
+      toast.error('Maximum 2 videos allowed');
+      return;
+    }
+
+    // Check file sizes (max 30MB per video)
+    const maxSize = 30 * 1024 * 1024; // 30MB
+    const oversizedFiles = files.filter(file => file.size > maxSize);
+    
+    if (oversizedFiles.length > 0) {
+      toast.error('Video files must be under 30MB each');
+      return;
+    }
+
+    setReviewData({ ...reviewData, videos: [...reviewData.videos, ...files] });
+  };
+
+  // Remove video preview (new videos only)
+  const removeVideo = (index) => {
+    const newVideos = [...reviewData.videos];
+    newVideos.splice(index, 1);
+    setReviewData({ ...reviewData, videos: newVideos });
+  };
+
+  // Remove existing video from server
+  const removeExistingVideo = async (videoUrl) => {
+    if (!editingReview) return;
+
+    try {
+      const response = await axios.post(
+        `${backendUrl}/api/review/remove-video/${editingReview._id}`,
+        { videoUrl },
+        { headers: { token } }
+      );
+
+      if (response.data.success) {
+        toast.success('Video removed');
+        setReviewData(prev => ({
+          ...prev,
+          existingVideos: prev.existingVideos.filter(vid => vid !== videoUrl)
+        }));
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error removing video:', error);
+      toast.error('Failed to remove video');
+    }
   };
 
   return (
@@ -353,6 +419,75 @@ const Reviews = () => {
                 )}
               </div>
 
+              {/* Videos */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">
+                  Add Videos (optional, max 2 videos, 30MB each)
+                </label>
+                
+                {/* Existing videos (edit mode only) */}
+                {editingReview && reviewData.existingVideos.length > 0 && (
+                  <div className="mb-2">
+                    <p className="text-xs text-gray-500 mb-1">Existing videos:</p>
+                    <div className="flex gap-2 flex-wrap">
+                      {reviewData.existingVideos.map((videoUrl, index) => (
+                        <div key={index} className="relative">
+                          <video
+                            src={getReviewVideo(videoUrl)}
+                            className="w-32 h-20 object-cover rounded"
+                            muted
+                            playsInline
+                            preload="none"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeExistingVideo(videoUrl)}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* New video upload */}
+                <input
+                  type="file"
+                  accept="video/*"
+                  multiple
+                  onChange={handleVideoChange}
+                  disabled={reviewData.videos.length + reviewData.existingVideos.length >= 2}
+                  className="text-sm w-full mb-1"
+                />
+                <p className="text-xs text-gray-500">Accepted formats: MP4, WebM, MOV</p>
+                
+                {/* New videos preview */}
+                {reviewData.videos.length > 0 && (
+                  <div className="flex gap-2 mt-2 flex-wrap">
+                    {reviewData.videos.map((file, index) => (
+                      <div key={index} className="relative">
+                        <video
+                          src={URL.createObjectURL(file)}
+                          className="w-32 h-20 object-cover rounded"
+                          muted
+                          playsInline
+                          preload="none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeVideo(index)}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <div className="flex gap-2">
                 <button
                   type="submit"
@@ -366,7 +501,7 @@ const Reviews = () => {
                     setShowReviewForm(false);
                     setSelectedProduct(null);
                     setEditingReview(null);
-                    setReviewData({ rating: 5, comment: '', images: [], existingImages: [] });
+                    setReviewData({ rating: 5, comment: '', images: [], existingImages: [], videos: [], existingVideos: [] });
                   }}
                   className="flex-1 border border-gray-300 px-6 py-2 text-sm"
                 >
@@ -493,7 +628,7 @@ const Reviews = () => {
                   )}
                   
                   {review.images && review.images.length > 0 && (
-                    <div className="flex gap-2 flex-wrap">
+                    <div className="flex gap-2 flex-wrap mb-2">
                       {review.images.map((img, idx) => (
                         <img
                           key={idx}
@@ -501,6 +636,23 @@ const Reviews = () => {
                           alt="review"
                           className="w-20 h-20 object-cover rounded cursor-pointer"
                           onClick={() => window.open(img, '_blank')}
+                        />
+                      ))}
+                    </div>
+                  )}
+                  
+                  {review.videos && review.videos.length > 0 && (
+                    <div className="flex gap-2 flex-wrap">
+                      {review.videos.map((vid, idx) => (
+                        <video
+                          key={idx}
+                          src={getReviewVideo(vid)}
+                          className="w-48 h-32 object-cover rounded"
+                          controls
+                          muted
+                          playsInline
+                          preload="none"
+                          loading="lazy"
                         />
                       ))}
                     </div>

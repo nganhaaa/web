@@ -7,24 +7,28 @@ import {
     canReview,
     updateReview,
     deleteReview,
-    removeReviewImage
+    removeReviewImage,
+    removeReviewVideo
 } from '../controllers/reviewController.js';
 import authUser from '../middleware/auth.js';
 import upload from '../middleware/multer.js';
 
 const reviewRouter = express.Router();
 
-// Add review (with optional images - max 5)
-reviewRouter.post('/add', authUser, upload.array('images', 5), addReview);
+// Add review (with optional images - max 5, videos - max 2)
+reviewRouter.post('/add', authUser, upload.array('images'), addReview);
 
-// Update review (with optional new images)
-reviewRouter.put('/update/:reviewId', authUser, upload.array('images', 5), updateReview);
+// Update review (with optional new images/videos)
+reviewRouter.put('/update/:reviewId', authUser, upload.array('images'), updateReview);
 
 // Delete review
 reviewRouter.delete('/delete/:reviewId', authUser, deleteReview);
 
 // Remove specific image from review
 reviewRouter.post('/remove-image/:reviewId', authUser, removeReviewImage);
+
+// Remove specific video from review
+reviewRouter.post('/remove-video/:reviewId', authUser, removeReviewVideo);
 
 // Get reviews for a specific product (public)
 reviewRouter.get('/product/:productId', getProductReviews);

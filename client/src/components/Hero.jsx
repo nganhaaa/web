@@ -1,5 +1,6 @@
 import { assets } from '../assets/assets'
 import './ChristmasHero.css'
+import { getHeroImage } from '../utils/imageOptimizer'
 
 const Hero = () => {
   return (
@@ -19,7 +20,7 @@ const Hero = () => {
         </div>
       </div>
       {/* right side */}
-      <img className='christmas-hero-image w-full sm:w-1/2 object-cover' src={assets.hero_img} alt="" />
+      <img className='christmas-hero-image w-full sm:w-1/2 object-cover' src={getHeroImage(assets.hero_img)} alt="" loading="lazy" />
     </div>
   )
 }
