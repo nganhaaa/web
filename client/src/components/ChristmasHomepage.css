@@ -30,6 +30,9 @@
   overflow: hidden;
   position: relative;
   width: 100%;
+  margin-bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, transparent 85%, white 100%);
+  padding-bottom: 40px;
 }
 
 /* =============== HOME =============== */
@@ -46,6 +49,7 @@
   max-width: 100%;
   margin: 0;
   padding: 0;
+  padding-bottom: 150px;
 }
 
 .home__bg,
@@ -99,7 +103,7 @@
 }
 
 .home__title {
-  bottom: 1.5rem;
+  bottom: 3rem;
   left: 0;
   right: 0;
   color: var(--first-color);

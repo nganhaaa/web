@@ -178,7 +178,7 @@ const PlaceOrder = () => {
 
           <div className="w-full text-end mt-8">
             <button type="submit" className="christmas-btn-primary w-full sm:w-auto px-16 py-3">
-              PLACE ORDER 🎁
+              PLACE ORDER
             </button>
           </div>
         </div>

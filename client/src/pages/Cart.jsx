@@ -35,7 +35,7 @@ const Cart = () => {
       </div>
       {cartData.length == 0 && (
         <div className="flex justify-center mt-10">
-          <p className="text-gray-500">🎄 Your cart is empty. Start shopping!</p>
+          <p className="text-gray-500">Your cart is empty. Start shopping!</p>
         </div>
       )}
       <div>
@@ -92,7 +92,7 @@ const Cart = () => {
             <CartTotal />
             <div className=" w-full text-end">
               <button onClick={() => navigate('/place-order')} className="christmas-btn-primary w-full sm:w-auto my-8">
-                PROCEED TO CHECKOUT 🎁
+                PROCEED TO CHECKOUT
               </button>
             </div>
           </div>

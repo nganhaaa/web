@@ -16,7 +16,7 @@ const LatestCollection = () => {
       <div className="text-center py-8 text-3xl">
         <Title text1={'LATEST'} text2={'COLLECTIONS'} />
         <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base" style={{color: '#8b0000'}}>
-          🎄 Discover our festive collection perfect for the holiday season. Celebrate Christmas in style! ✨
+          Discover our festive collection perfect for the holiday season. Celebrate Christmas in style!
         </p>
       </div>
 

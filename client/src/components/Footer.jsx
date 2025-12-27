@@ -8,7 +8,7 @@ const Footer = () => {
         <div>
           <img src={assets.logo} className='mb-5 w-32 brightness-0 invert' alt="" />
           <p className='w-full md:w-2/3 text-white opacity-80'>
-          🎄 Your one-stop shop for all festive fashion needs. Delivering joy and style this Christmas season!
+          Your one-stop shop for all festive fashion needs. Delivering joy and style this Christmas season!
           </p>
         </div>
 
@@ -35,7 +35,7 @@ const Footer = () => {
 
       <div>
         <hr className='border-gold-500'/>
-        <p className='text-center py-5 text-sm text-white opacity-80'>🎅 Copyright 2024 - All Right Reserved. Happy Holidays! 🎄</p>
+        <p className='text-center py-5 text-sm text-white opacity-80'>Copyright 2024 - All Right Reserved. Happy Holidays!</p>
       </div>
     </footer>
   )

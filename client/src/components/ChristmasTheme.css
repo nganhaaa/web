@@ -4,7 +4,7 @@
   color: white;
   font-weight: 600;
   padding: 12px 32px;
-  border: 2px solid #ffd700;
+  border: none;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
   transition: all 0.3s ease;
@@ -27,31 +27,22 @@
 .christmas-title {
   position: relative;
   display: inline-block;
+  font-weight: 400;
 }
 
 .christmas-title::before {
-  content: '🎄';
-  position: absolute;
-  left: -35px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 24px;
-  animation: float 3s ease-in-out infinite;
+  content: '';
+  display: none;
 }
 
 .christmas-title::after {
-  content: '🎄';
-  position: absolute;
-  right: -35px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 24px;
-  animation: float 3s ease-in-out infinite 1.5s;
+  content: '';
+  display: none;
 }
 
 /* Product Item */
 .christmas-product-item {
-  border: 2px solid #ffd700;
+  border: none;
   border-radius: 12px;
   transition: all 0.3s ease;
   background: white;
@@ -82,7 +73,7 @@
 
 /* Christmas Product Card */
 .christmas-product-card {
-  border: 3px solid #ffd700;
+  border: none;
   border-radius: 12px;
   background: white;
   box-shadow: 0 4px 20px rgba(196, 30, 58, 0.2);
@@ -92,12 +83,8 @@
 }
 
 .christmas-product-card::before {
-  content: '✨';
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 20px;
-  animation: sparkle 1.5s ease-in-out infinite;
+  content: '';
+  display: none;
 }
 
 @keyframes sparkle {
@@ -117,20 +104,7 @@
   border-color: #c41e3a;
 }
 
-/* Christmas Title */
-.christmas-title {
-  color: #c41e3a;
-  text-shadow: 2px 2px 4px rgba(196, 30, 58, 0.2);
-  font-weight: 700;
-  position: relative;
-  display: inline-block;
-}
 
-.christmas-title::after {
-  content: '🎄';
-  margin-left: 10px;
-  animation: sway 2s ease-in-out infinite;
-}
 
 @keyframes sway {
   0%, 100% {
@@ -146,7 +120,7 @@
 
 /* Christmas Input */
 .christmas-input {
-  border: 2px solid #ffd700;
+  border: 1px solid #ddd;
   border-radius: 8px;
   padding: 10px 15px;
   transition: all 0.3s ease;
@@ -165,7 +139,7 @@
   font-weight: bold;
   padding: 4px 12px;
   border-radius: 20px;
-  border: 2px solid #c41e3a;
+  border: none;
   box-shadow: 0 2px 10px rgba(255, 215, 0, 0.5);
 }
 
@@ -176,23 +150,13 @@
 }
 
 .christmas-section::before {
-  content: '❄️';
-  position: absolute;
-  font-size: 100px;
-  opacity: 0.1;
-  top: 20px;
-  left: 20px;
-  animation: float 6s ease-in-out infinite;
+  content: '';
+  display: none;
 }
 
 .christmas-section::after {
-  content: '⛄';
-  position: absolute;
-  font-size: 100px;
-  opacity: 0.1;
-  bottom: 20px;
-  right: 20px;
-  animation: float 6s ease-in-out infinite 3s;
+  content: '';
+  display: none;
 }
 
 @keyframes float {
@@ -207,7 +171,7 @@
 /* Newsletter Box */
 .christmas-newsletter {
   background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
-  border: 3px solid #ffd700;
+  border: none;
   border-radius: 16px;
   box-shadow: 0 8px 30px rgba(196, 30, 58, 0.3);
   position: relative;
@@ -215,27 +179,17 @@
 }
 
 .christmas-newsletter::before {
-  content: '❄️';
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  font-size: 40px;
-  opacity: 0.3;
-  animation: rotate-snowflake 10s linear infinite;
+  content: '';
+  display: none;
 }
 
 .christmas-newsletter::after {
-  content: '🎁';
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  font-size: 40px;
-  opacity: 0.3;
-  animation: bounce 2s ease-in-out infinite;
+  content: '';
+  display: none;
 }
 
 .christmas-newsletter-input {
-  border: 2px solid #ffd700;
+  border: 1px solid #ddd;
   border-radius: 8px;
   padding: 12px 16px;
   background: white;
@@ -252,7 +206,7 @@
 .christmas-newsletter-btn {
   background: linear-gradient(135deg, #165b33 0%, #0f3d22 100%);
   color: white;
-  border: 2px solid #ffd700;
+  border: none;
   border-radius: 8px;
   padding: 12px 32px;
   font-weight: bold;
@@ -285,7 +239,7 @@
 .christmas-footer {
   background: linear-gradient(135deg, #165b33 0%, #0f3d22 100%);
   color: white;
-  border-top: 4px solid #ffd700;
+  border-top: none;
   width: 100%;
   margin: 0;
   padding-left: max(20px, 5vw);
@@ -301,7 +255,7 @@
 
 /* Cart Total */
 .christmas-cart-total {
-  border: 3px solid #ffd700;
+  border: none;
   border-radius: 12px;
   background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
   padding: 20px;
@@ -320,7 +274,7 @@
 .christmas-btn-primary {
   background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
   color: white;
-  border: 2px solid #ffd700;
+  border: none;
   border-radius: 8px;
   padding: 12px 24px;
   font-weight: bold;
@@ -336,7 +290,7 @@
 .christmas-btn-secondary {
   background: linear-gradient(135deg, #165b33 0%, #0f3d22 100%);
   color: white;
-  border: 2px solid #ffd700;
+  border: none;
   border-radius: 8px;
   padding: 12px 24px;
   font-weight: bold;
