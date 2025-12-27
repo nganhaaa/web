@@ -175,11 +175,9 @@ const ChatBox = () => {
         </div>
         
         <div className="h-14 flex justify-center items-center bg-gradient-to-r from-red-600 via-green-600 to-red-600 w-full sm:rounded-t-xl relative">
-          <span className="absolute left-4 text-2xl animate-bounce">🎄</span>
           <p className="text-white text-base font-bold text-center flex items-center gap-2">
-            🎅 Forever - Merry Christmas 🎁
+            🎅 Forever - Merry Christmas
           </p>
-          <span className="absolute right-12 sm:right-4 text-2xl animate-bounce" style={{ animationDelay: '0.2s' }}>⛄</span>
           <div
             onClick={onCloseModel}
             className="sm:hidden p-2 absolute top-3 right-4"
@@ -216,14 +214,11 @@ const ChatBox = () => {
                     >
                       {!isUser && (
                         <span className="absolute -left-2 -top-2 text-xl">
-                          {msg.sender === 'bot' ? '🤖' : '🎁'}
+                          {msg.sender === 'bot' ? '🤖' : '�'}
                         </span>
                       )}
-                      {isUser && (
-                        <span className="absolute -right-2 -top-2 text-xl">🎄</span>
-                      )}
                       {msg.sender === 'bot' && (
-                        <div className="text-xs font-bold text-blue-600 mb-1">AI Bot 🤖</div>
+                        <div className="text-xs font-bold text-blue-600 mb-1">AI Bot</div>
                       )}
                       <p>{msg.message}</p>
                       <span className={`text-xs ${
@@ -241,13 +236,12 @@ const ChatBox = () => {
 
             <div className="px-2 relative">
               <div className="w-full border-2 border-red-200 h-[16%] rounded-xl bg-white mt-3 p-2 flex shadow-md">
-                <span className="flex items-center text-xl mr-2">🎅</span>
                 <input
                   value={enterMessage}
                   onChange={(e) => setEnterMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Send Christmas wishes... 🎄"
-                  className="text base border-0 outline-none w-[85%] focus:ring-0 hover:border-gray-300 py-3 sm:py-0"
+                  placeholder="Send message..."
+                  className="text base border-0 outline-none w-[90%] focus:ring-0 hover:border-gray-300 py-3 sm:py-0"
                 />
                 <div
                   onClick={handleSend}
@@ -256,7 +250,7 @@ const ChatBox = () => {
                   }`}
                 >
                   <div className="w-8 h-8 bg-gradient-to-r from-red-600 to-green-600 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform">
-                    <span className="text-white text-sm">🎁</span>
+                    <span className="text-white text-sm">➤</span>
                   </div>
                 </div>
               </div>
@@ -267,12 +261,11 @@ const ChatBox = () => {
           <div className="flex flex-col items-center justify-center h-[82%] sm:h-[78%] p-4">
             <div className="text-6xl mb-4 animate-bounce">🎅</div>
             <p className="text-lg text-gray-700 text-center mb-2">
-              🎄 Christmas Season is Here! 🎄
+              Christmas Season is Here!
             </p>
             <p className="text-base text-gray-500 text-center">
               Please <strong className="underline text-red-600"> <Link to='/login'>login </Link></strong> to chat with us
             </p>
-            <div className="mt-4 text-4xl">🎁⛄🦌</div>
           </div>
         )}
       </div>
