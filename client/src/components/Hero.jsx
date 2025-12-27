@@ -9,11 +9,11 @@ const Hero = () => {
         <div className='christmas-hero-text text-[#414141] px-6'>
           <div className='flex items-center gap-2'>
             <p className='christmas-hero-line w-8 sm:w-11 h-[3px]'></p>
-            <p className='christmas-hero-subtitle font-medium text-sm md:text-base'>🎁 OUR BESTSELLERS</p>
+            <p className='christmas-hero-subtitle font-medium text-sm md:text-base'>FESTIVE COLLECTION</p>
           </div>
-          <h1 className='christmas-hero-title prata-regular text-3xl sm:py-3 lg:text-5xl leading-relaxed'>Latest Arrivals ✨</h1>
+          <h1 className='christmas-hero-title prata-regular text-3xl sm:py-3 lg:text-5xl leading-relaxed' style={{color: '#c41e3a'}}>Holiday Special</h1>
           <div className='flex items-center gap-2 cursor-pointer group'>
-            <p className='christmas-hero-cta font-semibold text-sm md:text-base'>SHOP NOW 🎄</p>
+            <p className='christmas-hero-cta font-semibold text-sm md:text-base'>SHOP NOW</p>
             <p className='christmas-hero-line w-8 sm:w-11 h-[2px] group-hover:w-16 transition-all'></p>
           </div>
         </div>

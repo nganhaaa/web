@@ -24,44 +24,36 @@ const Navbar = () => {
         <img src={assets.logo} className="w-36 brightness-0 invert" alt="" />
       </Link>
 
-      <ul className="hidden sm:flex gap-5 text-sm" style={{ zIndex: 10, position: 'relative' }}>
-        <NavLink to="/" className="christmas-nav-link flex flex-col items-center gap-1">
+      <ul className="hidden sm:flex gap-8 text-sm items-center" style={{ zIndex: 10, position: 'relative' }}>
+        <NavLink to="/" className="christmas-nav-link">
           <p>HOME</p>
-          <hr className="w-2/4 border-none h-[1.5px] hidden" />
         </NavLink>
-        <NavLink to="/collection" className="christmas-nav-link flex flex-col items-center gap-1">
+        <NavLink to="/collection" className="christmas-nav-link">
           <p>COLLECTION</p>
-          <hr className="w-2/4 border-none h-[1.5px] hidden" />
         </NavLink>
-        <NavLink to="/vouchers" className="christmas-nav-link flex flex-col items-center gap-1">
-          <p>VOUCHERS</p>
-          <hr className="w-2/4 border-none h-[1.5px] hidden" />
-        </NavLink>
-        <NavLink to="/about" className="christmas-nav-link flex flex-col items-center gap-1">
+        <NavLink to="/about" className="christmas-nav-link">
           <p>ABOUT</p>
-          <hr className="w-2/4 border-none h-[1.5px] hidden" />
         </NavLink>
-        <NavLink to="/contact" className="christmas-nav-link flex flex-col items-center gap-1">
+        <NavLink to="/contact" className="christmas-nav-link">
           <p>CONTACT</p>
-          <hr className="w-2/4 border-none h-[1.5px] hidden" />
         </NavLink>
       </ul>
 
-      <div className="flex items-center gap-6" style={{ zIndex: 10, position: 'relative' }}>
+      <div className="flex items-center gap-5" style={{ zIndex: 10, position: 'relative' }}>
         <img
           onClick={() => {
             setShowSearch(true);
             navigate('/collection');
           }}
           src={assets.search_icon}
-          className="christmas-icon w-5 cursor-pointer"
+          className="christmas-icon w-5 h-5 cursor-pointer"
           alt=""
         />
 
         <div className="group relative">
           <img
             onClick={() => (token ? null : navigate('/login'))}
-            className="christmas-icon w-5 cursor-pointer"
+            className="christmas-icon w-5 h-5 cursor-pointer"
             src={assets.profile_icon}
             alt=""
           />
@@ -83,18 +75,18 @@ const Navbar = () => {
           )}
         </div>
         <Link to={token ? "/cart" : "/login"} className="relative">
-          <img src={assets.cart_icon} className="christmas-icon w-5 min-w-5" alt="" />
+          <img src={assets.cart_icon} className="christmas-icon w-5 h-5 min-w-5" alt="" />
           {token && <p className="christmas-cart-badge absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 aspect-square rounded-full text-[8px]">
             {getCartCount()}
           </p>}
         </Link>
         <Link to={token ? "/favourite" : "/login"} className="relative">
-          <img src={assets.favoriteIcon} className="christmas-icon w-7 object-cover" alt="" />
+          <img src={assets.favoriteIcon} className="christmas-icon w-5 h-5 object-contain" alt="" />
           {token && <p className="christmas-cart-badge absolute right-[-2px] bottom-[-3px] w-4 text-center leading-4 aspect-square rounded-full text-[8px]">
             {getFavouriteCount()}
           </p>}
         </Link>
-        <img onClick={() => setVisible(true)} src={assets.menu_icon} className="christmas-icon w-5 cursor-pointer sm:hidden" alt="" />
+        <img onClick={() => setVisible(true)} src={assets.menu_icon} className="christmas-icon w-5 h-5 cursor-pointer sm:hidden" alt="" />
       </div>
 
       {/* Sidebar menu for small screens */}
@@ -108,19 +100,19 @@ const Navbar = () => {
             <p className="font-semibold">Back</p>
           </div>
           <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/">
-            HOME
-          </NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/collection">
-            COLLECTION
-          </NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/vouchers">
-            VOUCHERS
+            Home
           </NavLink>
           <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/about">
-            ABOUT
+            About
+          </NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/collection">
+            Gifts
           </NavLink>
           <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/contact">
-            CONTACT
+            Share
+          </NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/contact">
+            Contact
           </NavLink>
         </div>
       </div>

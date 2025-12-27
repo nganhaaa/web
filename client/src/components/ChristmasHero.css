@@ -1,11 +1,9 @@
 /* Christmas Hero Styles */
 .christmas-hero {
-  background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fff8f8 100%);
   border: none;
-  border-top: 3px solid #ffd700;
-  border-bottom: 3px solid #ffd700;
   border-radius: 0;
-  box-shadow: 0 8px 30px rgba(196, 30, 58, 0.2);
+  box-shadow: 0 8px 30px rgba(139, 0, 0, 0.15);
   position: relative;
   overflow: hidden;
   margin: 0;
@@ -13,25 +11,13 @@
 }
 
 .christmas-hero::before {
-  content: '❄️';
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  font-size: 50px;
-  opacity: 0.2;
-  animation: rotate-snowflake 10s linear infinite;
-  z-index: 0;
+  content: '';
+  display: none;
 }
 
 .christmas-hero::after {
-  content: '⭐';
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  font-size: 50px;
-  opacity: 0.2;
-  animation: twinkle-star 2s ease-in-out infinite;
-  z-index: 0;
+  content: '';
+  display: none;
 }
 
 @keyframes rotate-snowflake {
@@ -97,7 +83,6 @@
 .christmas-hero-image {
   position: relative;
   z-index: 1;
-  border-left: 3px solid #ffd700;
   max-height: 600px;
   object-fit: cover;
 }
@@ -110,7 +95,6 @@
 
 @media (max-width: 640px) {
   .christmas-hero-image {
-    border-left: none;
-    border-top: 3px solid #ffd700;
+    /* No borders */
   }
 }

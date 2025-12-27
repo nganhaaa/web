@@ -39,14 +39,15 @@ const CartTotal = ({ subtotal, discount = 0, appliedVoucher }) => {
               </p>
             </div>
             <hr className='border-gold-300'/>
-          </>
-        )}
-        <div className="flex justify-between font-bold text-lg">
-          <b className='text-red-700'>Total 🎁</b>
-          <b className='text-red-700'>
-            {currency} {total.toFixed(2)}
-          </b>
-        </div>
+            <div className='flex justify-between'>
+                <p>Shipping Fee</p>
+                <p className='font-semibold'>{currency} {delivery_fee}.00</p>
+            </div>
+            <hr className='border-gold-300'/>
+            <div className='flex justify-between text-lg'>
+                <b className='text-red-700'>Total</b>
+                <b className='text-red-700'>{currency} {getCartAmount() === 0 ? 0 : getCartAmount() + delivery_fee}.00</b>
+            </div>
       </div>
     </div>
   );
