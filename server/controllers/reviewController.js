@@ -1,15 +1,23 @@
 import reviewModel from '../models/reviewModel.js';
 import orderModel from '../models/orderModel.js';
 import { v2 as cloudinary } from 'cloudinary';
+import { validateReviewInput } from '../utils/validator.js';
+import { asyncHandler } from '../utils/errorHandler.js';
 
 // Add a review
-const addReview = async (req, res) => {
+const addReview = asyncHandler(async (req, res) => {
     try {
         const { productId, orderId, rating, comment } = req.body;
         // Get userId from req (set by auth middleware) - works with FormData
         const userId = req.userId || req.body.userId;
 
         console.log('🔍 Review Request:', { productId, orderId, rating, userId });
+
+        // Validation
+        const validationError = validateReviewInput({ rating, comment });
+        if (validationError) {
+            return res.json({ success: false, message: validationError });
+        }
 
         // Validate required fields
         if (!productId || !orderId || !rating) {
@@ -111,10 +119,10 @@ const addReview = async (req, res) => {
         console.error('Error adding review:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 // Get reviews for a product
-const getProductReviews = async (req, res) => {
+const getProductReviews = asyncHandler(async (req, res) => {
     try {
         const { productId } = req.params;
 
@@ -137,10 +145,10 @@ const getProductReviews = async (req, res) => {
         console.error('Error getting reviews:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 // Get user's reviews (already reviewed products)
-const getUserReviews = async (req, res) => {
+const getUserReviews = asyncHandler(async (req, res) => {
     try {
         const userId = req.userId || req.body.userId;
         
@@ -158,10 +166,10 @@ const getUserReviews = async (req, res) => {
         console.error('Error getting user reviews:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 // Get products pending review (delivered but not reviewed)
-const getPendingReviews = async (req, res) => {
+const getPendingReviews = asyncHandler(async (req, res) => {
     try {
         const userId = req.userId || req.body.userId;
         if (!userId) {
@@ -216,10 +224,10 @@ const getPendingReviews = async (req, res) => {
         console.error('Error getting pending reviews:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 // Check if user can review a product
-const canReview = async (req, res) => {
+const canReview = asyncHandler(async (req, res) => {
     try {
         const { productId } = req.params;
         const userId = req.userId || req.body.userId;
@@ -267,10 +275,10 @@ const canReview = async (req, res) => {
         console.error('Error checking review eligibility:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 // Update a review
-const updateReview = async (req, res) => {
+const updateReview = asyncHandler(async (req, res) => {
     try {
         const { reviewId } = req.params;
         const { rating, comment } = req.body;
@@ -328,10 +336,10 @@ const updateReview = async (req, res) => {
         console.error('Error updating review:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 // Delete a review
-const deleteReview = async (req, res) => {
+const deleteReview = asyncHandler(async (req, res) => {
     try {
         const { reviewId } = req.params;
         const userId = req.userId || req.body.userId;
@@ -372,10 +380,10 @@ const deleteReview = async (req, res) => {
         console.error('Error deleting review:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 // Remove a specific image from review
-const removeReviewImage = async (req, res) => {
+const removeReviewImage = asyncHandler(async (req, res) => {
     try {
         const { reviewId } = req.params;
         const { imageUrl } = req.body;
@@ -414,7 +422,7 @@ const removeReviewImage = async (req, res) => {
         console.error('Error removing image:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 export { 
     addReview, 
