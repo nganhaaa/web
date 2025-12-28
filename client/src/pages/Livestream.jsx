@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import { ShopContext } from '../context/ShopContext.jsx';
-
-const socket = io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000');
+import { useNavigate } from 'react-router-dom';
 
 const Livestream = () => {
   const videoRef = useRef(null);
@@ -15,6 +14,9 @@ const Livestream = () => {
   const [productList, setProductList] = useState([]);
   const peerRef = useRef(null);
   const [username, setUsername] = useState('');
+  const navigate = useNavigate();
+  const socketRef = useRef(null);
+  const hasJoinedRef = useRef(false);
 
   useEffect(() => {
     setProductList(products);
@@ -52,14 +54,30 @@ const Livestream = () => {
   }, [token]);
 
   useEffect(() => {
-    // Join livestream room
-    socket.emit('join-livestream', { username });
+    // Tạo socket connection
+    if (!socketRef.current) {
+      socketRef.current = io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000');
+    }
+    const socket = socketRef.current;
+
+    // Join livestream room - chỉ join 1 lần
+    if (!hasJoinedRef.current && username) {
+      console.log('[Client] Joining livestream with username:', username);
+      socket.emit('join-livestream', { username });
+      hasJoinedRef.current = true;
+    }
 
     // Nhận trạng thái stream
     socket.on('stream-started', () => {
       console.log('[Client] Stream started');
       setStreamStarted(true);
-      socket.emit('client-ready');
+      // Chỉ gửi client-ready nếu chưa có peer connection
+      if (!peerRef.current) {
+        setTimeout(() => {
+          console.log('[Client] Sending client-ready');
+          socket.emit('client-ready');
+        }, 100);
+      }
     });
 
     socket.on('stream-stopped', () => {
@@ -96,6 +114,11 @@ const Livestream = () => {
     socket.on('signal', async (data) => {
       if (data.type === 'offer') {
         console.log('[Client] Received offer');
+        // Nếu đã có peer connection, đóng cái cũ
+        if (peerRef.current) {
+          peerRef.current.close();
+        }
+        
         const peer = new RTCPeerConnection({
           iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
         });
@@ -141,6 +164,7 @@ const Livestream = () => {
     });
 
     return () => {
+      console.log('[Client] Cleaning up livestream');
       socket.off('stream-started');
       socket.off('stream-stopped');
       socket.off('new-comment');
@@ -150,21 +174,31 @@ const Livestream = () => {
       
       if (peerRef.current) {
         peerRef.current.close();
+        peerRef.current = null;
       }
+      
+      // Disconnect socket khi unmount component
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
+      hasJoinedRef.current = false;
     };
   }, [username]);
 
   // When sending comment from client, always use the username state (from DB or fallback)
   const handleSend = () => {
-    if (input.trim()) {
+    if (input.trim() && socketRef.current) {
       const comment = { text: input, time: new Date().toISOString(), username };
-      socket.emit('send-comment', comment);
+      socketRef.current.emit('send-comment', comment);
       setInput('');
     }
   };
 
   const handleLike = () => {
-    socket.emit('send-like');
+    if (socketRef.current) {
+      socketRef.current.emit('send-like');
+    }
   };
 
   return (
@@ -180,7 +214,10 @@ const Livestream = () => {
               className="w-full h-[360px] md:h-[480px] object-contain bg-black rounded-xl" 
             />
             {highlightedProduct && (
-              <div className="bg-white/90 p-4 rounded shadow my-4 flex items-center gap-3 w-full max-w-md mx-auto">
+              <div 
+                onClick={() => navigate(`/product/${highlightedProduct._id}`)}
+                className="bg-white/90 p-4 rounded shadow my-4 flex items-center gap-3 w-full max-w-md mx-auto cursor-pointer hover:bg-gray-100 transition-colors"
+              >
                 <img 
                   src={highlightedProduct.image?.[0]} 
                   alt={highlightedProduct.name} 
@@ -189,6 +226,7 @@ const Livestream = () => {
                 <div>
                   <b>Highlighted product:</b> {highlightedProduct.name}
                   <div className="text-red-600 font-bold">{highlightedProduct.price} {highlightedProduct.currency || '$'}</div>
+                  <div className="text-xs text-blue-600 mt-1">👆 Click to view details</div>
                 </div>
               </div>
             )}

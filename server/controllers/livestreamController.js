@@ -5,6 +5,7 @@ let adminSocketId = null;
 let likeCount = 0;
 const clientsInRoom = new Map(); // clientId -> username
 let isStreaming = false;
+let currentHighlightedProduct = null; // Lưu sản phẩm đang được highlight
 
 export function handleLivestreamConnection(socket, io) {
   let isAdmin = false;
@@ -29,6 +30,12 @@ export function handleLivestreamConnection(socket, io) {
     
     // Send current like count to new client
     socket.emit('like-count', likeCount);
+    
+    // Send current highlighted product to new client (nếu có)
+    if (currentHighlightedProduct) {
+      console.log('[Server] Sending current highlighted product to new client:', currentHighlightedProduct.name);
+      socket.emit('product-highlighted', currentHighlightedProduct);
+    }
     
     // If stream is already running, notify this client
     if (isStreaming) {
@@ -66,6 +73,7 @@ export function handleLivestreamConnection(socket, io) {
   socket.on('admin-stop-stream', () => {
     isStreaming = false;
     likeCount = 0;
+    currentHighlightedProduct = null; // Clear highlighted product khi stop stream
     console.log('[Server] Admin stopped stream');
     io.to('livestream').emit('stream-stopped');
     io.to('livestream').emit('like-count', 0);
@@ -76,6 +84,7 @@ export function handleLivestreamConnection(socket, io) {
 
   // Admin highlights a product
   socket.on('highlight-product', (product) => {
+    currentHighlightedProduct = product; // Lưu sản phẩm được highlight
     console.log('[Server] Product highlighted:', product.name);
     io.to('livestream').emit('product-highlighted', product);
     if (adminSocketId) {
@@ -141,6 +150,7 @@ export function handleLivestreamConnection(socket, io) {
       adminSocketId = null;
       isStreaming = false;
       likeCount = 0;
+      currentHighlightedProduct = null; // Clear khi admin disconnect
       io.to('livestream').emit('stream-stopped');
     } else if (clientsInRoom.has(socket.id)) {
       const username = clientsInRoom.get(socket.id);
