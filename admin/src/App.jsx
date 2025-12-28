@@ -14,6 +14,7 @@ import Chat from "./pages/Chat"
 import Revenue from "./pages/Revenue"
 import Vouchers from "./pages/Vouchers"
 import ChristmasEffects from "./components/ChristmasEffects"
+import Livestream from './pages/Livestream';
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 export const currency = '$'
@@ -48,6 +49,7 @@ const App = () => {
               <Route path="/orders" element={<Orders token={token} />}/>
               <Route path="/chat" element={<Chat token={token} />}/>
               <Route path="/vouchers" element={<Vouchers token={token} />}/>
+              <Route path="/livestream" element={<Livestream token={token} />} />
             </Routes>
           </div>
         </div>

@@ -36,6 +36,11 @@ const Sidebar = () => {
           <p className='hidden sm:block'>Vouchers 🎟️</p>
         </NavLink>
 
+        <NavLink className='christmas-sidebar-link flex items-center gap-3 border-r-0 px-3 py-2 rounded-l' to='/livestream'>
+          <img className='w-5 h-5' src={assets.sled_icon || assets.logo} alt="" />
+          <p className='hidden sm:block'>Livestream 🎥</p>
+        </NavLink>
+
       </div>
     </div>
   )

@@ -20,6 +20,7 @@ import { handleConnection } from './controllers/chatController.js';
 import { generalLimiter, authLimiter, orderLimiter } from './middleware/rateLimiter.js';
 import { sanitizeInput, cleanXSS, securityHeaders } from './middleware/sanitizer.js';
 import { errorMiddleware } from './utils/errorHandler.js';
+import { handleLivestreamConnection } from './controllers/livestreamController.js';
 
 // App Config
 const app = express();
@@ -76,6 +77,10 @@ app.use(errorMiddleware);
 // 404 handler
 app.use((req, res) => {
     res.status(404).json({ success: false, message: 'Route not found' });
+});
+io.on('connection', (socket) => {
+  handleConnection(socket, io); // chat
+  handleLivestreamConnection(socket, io); // livestream
 });
 
 // Start Server

@@ -21,6 +21,8 @@ const Login = () => {
           setUserId(response.data.userId);
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('userId', response.data.userId);
+          localStorage.setItem('username', name); // Save username for comment
+          localStorage.setItem('user', JSON.stringify({ name, email }));
           console.log(response.data)
 
         } else {
@@ -33,6 +35,10 @@ const Login = () => {
           setUserId(response.data.userId);
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('userId', response.data.userId);
+          if (response.data.name) {
+            localStorage.setItem('username', response.data.name);
+            localStorage.setItem('user', JSON.stringify({ name: response.data.name, email }));
+          }
 
         } else {
           toast.error(response.data.message);
