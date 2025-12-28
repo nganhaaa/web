@@ -121,7 +121,17 @@ const Collection = () => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10">
+    <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 relative">
+      {/* Background image with overlay */}
+      <div 
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat -z-10"
+        style={{
+          backgroundImage: "url('/christmas5.jpg')",
+        }}
+      >
+        <div className="absolute inset-0 bg-white/85"></div>
+      </div>
+
       {/* Filter Options */}
       <div className="min-w-60">
         <p

@@ -265,7 +265,17 @@ const Vouchers = () => {
   ];
 
   return (
-    <div className="border-t pt-10 min-h-screen">
+    <div className="border-t pt-10 min-h-screen relative">
+      {/* Background image with overlay */}
+      <div 
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat -z-10"
+        style={{
+          backgroundImage: "url('/christmas4.jpg')",
+        }}
+      >
+        <div className="absolute inset-0 bg-white/85"></div>
+      </div>
+
       <div className="text-2xl mb-6">
         <Title text1={'DISCOUNT'} text2={'VOUCHERS'} />
       </div>

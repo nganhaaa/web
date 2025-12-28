@@ -202,10 +202,20 @@ const Livestream = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full min-h-[70vh] py-8 px-2">
-      <h2 className="text-2xl font-bold mb-4">Livestream</h2>
+    <div className="flex flex-col items-center w-full min-h-[70vh] py-8 px-2 relative">
+      {/* Background image with overlay */}
+      <div 
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat -z-10"
+        style={{
+          backgroundImage: "url('/christmas2.jpg')",
+        }}
+      >
+        <div className="absolute inset-0 bg-black/50"></div>
+      </div>
+
+      <h2 className="text-2xl font-bold mb-4 text-white">Livestream</h2>
       {streamStarted ? (
-        <div className="w-full max-w-5xl bg-white/90 rounded-xl shadow-xl flex flex-col md:flex-row overflow-hidden">
+        <div className="w-full max-w-5xl bg-white/95 backdrop-blur-sm rounded-xl shadow-xl flex flex-col md:flex-row overflow-hidden">
           <div className="flex-1 flex flex-col items-center justify-center p-4">
             <video 
               ref={videoRef} 
@@ -264,10 +274,10 @@ const Livestream = () => {
           </div>
         </div>
       ) : (
-        <div className="text-center p-12 bg-white/80 rounded-xl shadow-lg">
+        <div className="text-center p-12 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg">
           <div className="text-6xl mb-4">📺</div>
-          <div className="text-gray-500">No livestream is active</div>
-          <div className="text-gray-400 text-sm mt-2">Please check back later!</div>
+          <div className="text-gray-700 font-semibold text-lg">No livestream is active</div>
+          <div className="text-gray-600 text-sm mt-2">Please check back later!</div>
         </div>
       )}
     </div>

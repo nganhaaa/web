@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom' // 1. Import useLocation
 import Home from './pages/Home'
 import About from './pages/About'
 import Contact from './pages/Contact'
@@ -10,7 +10,7 @@ import Login from './pages/Login'
 import PlaceOrder from './pages/PlaceOrder'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Favourite from './pages/Favourite'
 import Reviews from './pages/Reviews'
@@ -21,6 +21,16 @@ import Vouchers from './pages/Vouchers'
 import Livestream from './pages/Livestream'
 
 const App = () => {
+  // 2. Lấy vị trí (URL) hiện tại
+  const location = useLocation();
+  // 3. Kiểm tra xem có phải trang login không
+  const isLoginPage = location.pathname === '/login';
+
+  // 4. Tạo class động: nếu là trang login thì không có padding, ngược lại thì có
+  const mainContentClass = isLoginPage 
+    ? 'flex-grow' 
+    : 'flex-grow px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]';
+
   return (
     <div className='flex flex-col min-h-screen'>
       <ChristmasEffects />
@@ -28,9 +38,10 @@ const App = () => {
       {/* Navbar full width - no padding */}
       <Navbar />
       
-      {/* Main content with padding - flex grow to push footer down */}
-      <div className='flex-grow px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
-        <SearchBar />
+      {/* 5. Sử dụng class đã tạo */}
+      <div className={mainContentClass}>
+        {/* Chỉ hiển thị SearchBar nếu không phải trang Login */}
+        {!isLoginPage && <SearchBar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
