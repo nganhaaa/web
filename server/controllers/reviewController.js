@@ -1,15 +1,23 @@
 import reviewModel from '../models/reviewModel.js';
 import orderModel from '../models/orderModel.js';
 import { v2 as cloudinary } from 'cloudinary';
+import { validateReviewInput } from '../utils/validator.js';
+import { asyncHandler } from '../utils/errorHandler.js';
 
 // Add a review
-const addReview = async (req, res) => {
+const addReview = asyncHandler(async (req, res) => {
     try {
         const { productId, orderId, rating, comment } = req.body;
         // Get userId from req (set by auth middleware) - works with FormData
         const userId = req.userId || req.body.userId;
 
         console.log('🔍 Review Request:', { productId, orderId, rating, userId });
+
+        // Validation
+        const validationError = validateReviewInput({ rating, comment });
+        if (validationError) {
+            return res.json({ success: false, message: validationError });
+        }
 
         // Validate required fields
         if (!productId || !orderId || !rating) {
@@ -75,22 +83,57 @@ const addReview = async (req, res) => {
             });
         }
 
-        // Handle image uploads (max 5 images)
+        // Handle media uploads (max 5 images + 2 videos)
         let imageUrls = [];
+        let videoUrls = [];
+        
         if (req.files && req.files.length > 0) {
-            if (req.files.length > 5) {
+            const imageFiles = [];
+            const videoFiles = [];
+            
+            // Separate images and videos by mimetype
+            req.files.forEach(file => {
+                if (file.mimetype.startsWith('video/')) {
+                    videoFiles.push(file);
+                } else if (file.mimetype.startsWith('image/')) {
+                    imageFiles.push(file);
+                }
+            });
+            
+            // Check limits
+            if (imageFiles.length > 5) {
                 return res.json({ 
                     success: false, 
                     message: 'Maximum 5 images allowed' 
                 });
             }
+            if (videoFiles.length > 2) {
+                return res.json({ 
+                    success: false, 
+                    message: 'Maximum 2 videos allowed' 
+                });
+            }
 
             // Upload images to Cloudinary
-            const uploadPromises = req.files.map(file => 
-                cloudinary.uploader.upload(file.path, { resource_type: 'image' })
-            );
-            const uploadResults = await Promise.all(uploadPromises);
-            imageUrls = uploadResults.map(result => result.secure_url);
+            if (imageFiles.length > 0) {
+                const imagePromises = imageFiles.map(file => 
+                    cloudinary.uploader.upload(file.path, { resource_type: 'image' })
+                );
+                const imageResults = await Promise.all(imagePromises);
+                imageUrls = imageResults.map(result => result.secure_url);
+            }
+            
+            // Upload videos to Cloudinary
+            if (videoFiles.length > 0) {
+                const videoPromises = videoFiles.map(file => 
+                    cloudinary.uploader.upload(file.path, { 
+                        resource_type: 'video',
+                        folder: 'ecommerce-reviews/videos'
+                    })
+                );
+                const videoResults = await Promise.all(videoPromises);
+                videoUrls = videoResults.map(result => result.secure_url);
+            }
         }
 
         // Create review
@@ -100,7 +143,8 @@ const addReview = async (req, res) => {
             orderId,
             rating: Number(rating),
             comment: comment || '',
-            images: imageUrls
+            images: imageUrls,
+            videos: videoUrls
         });
 
         await review.save();
@@ -111,10 +155,10 @@ const addReview = async (req, res) => {
         console.error('Error adding review:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 // Get reviews for a product
-const getProductReviews = async (req, res) => {
+const getProductReviews = asyncHandler(async (req, res) => {
     try {
         const { productId } = req.params;
 
@@ -137,10 +181,10 @@ const getProductReviews = async (req, res) => {
         console.error('Error getting reviews:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 // Get user's reviews (already reviewed products)
-const getUserReviews = async (req, res) => {
+const getUserReviews = asyncHandler(async (req, res) => {
     try {
         const userId = req.userId || req.body.userId;
         
@@ -158,10 +202,10 @@ const getUserReviews = async (req, res) => {
         console.error('Error getting user reviews:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 // Get products pending review (delivered but not reviewed)
-const getPendingReviews = async (req, res) => {
+const getPendingReviews = asyncHandler(async (req, res) => {
     try {
         const userId = req.userId || req.body.userId;
         if (!userId) {
@@ -216,10 +260,10 @@ const getPendingReviews = async (req, res) => {
         console.error('Error getting pending reviews:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 // Check if user can review a product
-const canReview = async (req, res) => {
+const canReview = asyncHandler(async (req, res) => {
     try {
         const { productId } = req.params;
         const userId = req.userId || req.body.userId;
@@ -267,10 +311,10 @@ const canReview = async (req, res) => {
         console.error('Error checking review eligibility:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 // Update a review
-const updateReview = async (req, res) => {
+const updateReview = asyncHandler(async (req, res) => {
     try {
         const { reviewId } = req.params;
         const { rating, comment } = req.body;
@@ -289,24 +333,62 @@ const updateReview = async (req, res) => {
             });
         }
 
-        // Handle new image uploads
-        let newImageUrls = [];
+        // Separate images and videos from uploaded files
+        const imageFiles = [];
+        const videoFiles = [];
+        
         if (req.files && req.files.length > 0) {
-            // Check total images (existing + new)
-            const totalImages = review.images.length + req.files.length;
-            if (totalImages > 5) {
-                return res.json({ 
-                    success: false, 
-                    message: `Maximum 5 images allowed. You have ${review.images.length} existing images.` 
-                });
-            }
+            req.files.forEach(file => {
+                if (file.mimetype.startsWith('image/')) {
+                    imageFiles.push(file);
+                } else if (file.mimetype.startsWith('video/')) {
+                    videoFiles.push(file);
+                }
+            });
+        }
 
-            // Upload new images to Cloudinary
-            const uploadPromises = req.files.map(file => 
-                cloudinary.uploader.upload(file.path, { resource_type: 'image' })
+        // Check image limit
+        const totalImages = review.images.length + imageFiles.length;
+        if (totalImages > 5) {
+            return res.json({ 
+                success: false, 
+                message: `Maximum 5 images allowed. You have ${review.images.length} existing images.` 
+            });
+        }
+
+        // Check video limit
+        const totalVideos = (review.videos?.length || 0) + videoFiles.length;
+        if (totalVideos > 2) {
+            return res.json({ 
+                success: false, 
+                message: `Maximum 2 videos allowed. You have ${review.videos?.length || 0} existing videos.` 
+            });
+        }
+
+        // Upload new images to Cloudinary
+        let newImageUrls = [];
+        if (imageFiles.length > 0) {
+            const uploadPromises = imageFiles.map(file => 
+                cloudinary.uploader.upload(file.path, { 
+                    resource_type: 'image',
+                    folder: 'ecommerce-reviews/images'
+                })
             );
             const uploadResults = await Promise.all(uploadPromises);
             newImageUrls = uploadResults.map(result => result.secure_url);
+        }
+
+        // Upload new videos to Cloudinary
+        let newVideoUrls = [];
+        if (videoFiles.length > 0) {
+            const uploadPromises = videoFiles.map(file => 
+                cloudinary.uploader.upload(file.path, { 
+                    resource_type: 'video',
+                    folder: 'ecommerce-reviews/videos'
+                })
+            );
+            const uploadResults = await Promise.all(uploadPromises);
+            newVideoUrls = uploadResults.map(result => result.secure_url);
         }
 
         // Update review fields
@@ -315,8 +397,11 @@ const updateReview = async (req, res) => {
         if (newImageUrls.length > 0) {
             review.images = [...review.images, ...newImageUrls];
         }
+        if (newVideoUrls.length > 0) {
+            review.videos = [...(review.videos || []), ...newVideoUrls];
+        }
 
-        await review.save();
+        await review.save({ validateModifiedOnly: true });
 
         res.json({ 
             success: true, 
@@ -328,10 +413,10 @@ const updateReview = async (req, res) => {
         console.error('Error updating review:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 // Delete a review
-const deleteReview = async (req, res) => {
+const deleteReview = asyncHandler(async (req, res) => {
     try {
         const { reviewId } = req.params;
         const userId = req.userId || req.body.userId;
@@ -372,10 +457,10 @@ const deleteReview = async (req, res) => {
         console.error('Error deleting review:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
 
 // Remove a specific image from review
-const removeReviewImage = async (req, res) => {
+const removeReviewImage = asyncHandler(async (req, res) => {
     try {
         const { reviewId } = req.params;
         const { imageUrl } = req.body;
@@ -414,7 +499,49 @@ const removeReviewImage = async (req, res) => {
         console.error('Error removing image:', error);
         res.json({ success: false, message: error.message });
     }
-};
+});
+
+// Remove a specific video from review
+const removeReviewVideo = asyncHandler(async (req, res) => {
+    try {
+        const { reviewId } = req.params;
+        const { videoUrl } = req.body;
+        const userId = req.userId || req.body.userId;
+
+        if (!userId) {
+            return res.json({ success: false, message: 'User not authenticated' });
+        }
+
+        // Find review and verify ownership
+        const review = await reviewModel.findOne({ _id: reviewId, userId });
+        if (!review) {
+            return res.json({ 
+                success: false, 
+                message: 'Review not found or you do not have permission to edit it' 
+            });
+        }
+
+        // Remove video URL from array
+        review.videos = review.videos.filter(vid => vid !== videoUrl);
+        await review.save();
+
+        // Delete video from Cloudinary
+        const publicId = videoUrl.split('/').pop().split('.')[0];
+        await cloudinary.uploader.destroy(publicId, { resource_type: 'video' }).catch(err => 
+            console.log('Video could not be deleted from Cloudinary:', err)
+        );
+
+        res.json({ 
+            success: true, 
+            message: 'Video removed successfully',
+            review 
+        });
+
+    } catch (error) {
+        console.error('Error removing video:', error);
+        res.json({ success: false, message: error.message });
+    }
+});
 
 export { 
     addReview, 
@@ -424,5 +551,6 @@ export {
     canReview,
     updateReview,
     deleteReview,
-    removeReviewImage
+    removeReviewImage,
+    removeReviewVideo
 };

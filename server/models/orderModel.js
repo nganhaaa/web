@@ -27,6 +27,9 @@ const orderSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
     items: { type: [orderItemSchema], required: true },
     amount: { type: Number, required: true },
+    originalAmount: { type: Number },
+    discount: { type: Number, default: 0 },
+    voucherId: { type: mongoose.Schema.Types.ObjectId, ref: 'voucher' },
     address: { type: addressSchema, required: true },
     status: { 
         type: String, 

@@ -2,11 +2,52 @@ import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
 import BoxImage from "../assets/package_icon.png"
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
+
 const Order = () => {
-  const { getOrderUser, currency } = useContext(ShopContext);
+  const { getOrderUser, currency, backendUrl } = useContext(ShopContext);
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  // Xử lý callback từ MoMo
+  useEffect(() => {
+    const verifyMomoPayment = async () => {
+      const orderId = searchParams.get('orderId');
+      const resultCode = searchParams.get('resultCode');
+      
+      if (orderId && resultCode !== null) {
+        try {
+          const response = await axios.post(backendUrl + '/api/order/verify', {
+            orderId,
+            resultCode: parseInt(resultCode)
+          });
+          
+          if (response.data.success) {
+            toast.success('Thanh toán MoMo thành công!');
+          } else {
+            toast.error('Thanh toán MoMo thất bại!');
+          }
+          
+          // Xóa query params khỏi URL
+          navigate('/order', { replace: true });
+          
+          // Reload orders sau khi verify
+          const updatedOrders = await getOrderUser(localStorage.getItem("token"));
+          setOrders(updatedOrders.reverse());
+        } catch (error) {
+          console.error('Error verifying payment:', error);
+          toast.error('Lỗi khi xác thực thanh toán!');
+        }
+      }
+    };
+    
+    verifyMomoPayment();
+  }, [searchParams]);
 
   useEffect(() => {
     getOrderUser(localStorage.getItem("token")).then((r) => setOrders(r.reverse()));

@@ -17,6 +17,7 @@ import Reviews from './pages/Reviews'
 import ChatBox from './components/chat'
 import SearchBar from './components/SearchBar'
 import ChristmasEffects from './components/ChristmasEffects'
+import Vouchers from './pages/Vouchers'
 import Livestream from './pages/Livestream'
 
 const App = () => {
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/collection" element={<Collection />} />
+          <Route path="/vouchers" element={<Vouchers />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/order" element={<Order />} />

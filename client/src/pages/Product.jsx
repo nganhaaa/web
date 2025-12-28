@@ -5,6 +5,7 @@ import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { getProductDetail, getProductThumbnail, getReviewVideo } from '../utils/imageOptimizer';
 
 const Product = () => {
   const { id } = useParams();
@@ -28,7 +29,9 @@ const Product = () => {
     rating: 5,
     comment: '',
     images: [],
-    existingImages: []
+    existingImages: [],
+    videos: [],
+    existingVideos: []
   });
 
   const fetchData = async () => {
@@ -117,6 +120,9 @@ const Product = () => {
         reviewData.images.forEach((file) => {
           formData.append('images', file);
         });
+        reviewData.videos.forEach((file) => {
+          formData.append('images', file);
+        });
 
         const response = await axios.put(
           `${backendUrl}/api/review/update/${userReview._id}`, 
@@ -128,7 +134,7 @@ const Product = () => {
           toast.success('Review updated successfully!');
           setShowReviewForm(false);
           setEditingReview(false);
-          setReviewData({ rating: 5, comment: '', images: [], existingImages: [] });
+          setReviewData({ rating: 5, comment: '', images: [], existingImages: [], videos: [], existingVideos: [] });
           fetchReviews();
         } else {
           toast.error(response.data.message);
@@ -142,6 +148,9 @@ const Product = () => {
         reviewData.images.forEach((file) => {
           formData.append('images', file);
         });
+        reviewData.videos.forEach((file) => {
+          formData.append('images', file);
+        });
 
         const response = await axios.post(`${backendUrl}/api/review/add`, formData, {
           headers: { token }
@@ -150,7 +159,7 @@ const Product = () => {
         if (response.data.success) {
           toast.success('Review submitted successfully!');
           setShowReviewForm(false);
-          setReviewData({ rating: 5, comment: '', images: [], existingImages: [] });
+          setReviewData({ rating: 5, comment: '', images: [], existingImages: [], videos: [], existingVideos: [] });
           fetchReviews();
           checkCanReview();
         } else {
@@ -171,7 +180,9 @@ const Product = () => {
       rating: userReview.rating,
       comment: userReview.comment || '',
       images: [],
-      existingImages: userReview.images || []
+      existingImages: userReview.images || [],
+      videos: [],
+      existingVideos: userReview.videos || []
     });
     setShowReviewForm(true);
   };
@@ -227,6 +238,32 @@ const Product = () => {
     }
   };
 
+  // Remove existing video from server
+  const removeExistingVideo = async (videoUrl) => {
+    if (!userReview) return;
+
+    try {
+      const response = await axios.post(
+        `${backendUrl}/api/review/remove-video/${userReview._id}`,
+        { videoUrl },
+        { headers: { token } }
+      );
+
+      if (response.data.success) {
+        toast.success('Video removed');
+        setReviewData(prev => ({
+          ...prev,
+          existingVideos: prev.existingVideos.filter(vid => vid !== videoUrl)
+        }));
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error removing video:', error);
+      toast.error('Failed to remove video');
+    }
+  };
+
   // Handle image upload
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -239,11 +276,40 @@ const Product = () => {
     setReviewData({ ...reviewData, images: [...reviewData.images, ...files] });
   };
 
+  // Handle video upload with size validation
+  const handleVideoChange = (e) => {
+    const files = Array.from(e.target.files);
+    const totalVideos = reviewData.videos.length + reviewData.existingVideos.length;
+    
+    if (files.length + totalVideos > 2) {
+      toast.error('Maximum 2 videos allowed');
+      return;
+    }
+
+    // Check file sizes (max 30MB per video)
+    const maxSize = 30 * 1024 * 1024; // 30MB
+    const oversizedFiles = files.filter(file => file.size > maxSize);
+    
+    if (oversizedFiles.length > 0) {
+      toast.error('Video files must be under 30MB each');
+      return;
+    }
+
+    setReviewData({ ...reviewData, videos: [...reviewData.videos, ...files] });
+  };
+
   // Remove image preview (new images only)
   const removeImage = (index) => {
     const newImages = [...reviewData.images];
     newImages.splice(index, 1);
     setReviewData({ ...reviewData, images: newImages });
+  };
+
+  // Remove video preview (new videos only)
+  const removeVideo = (index) => {
+    const newVideos = [...reviewData.videos];
+    newVideos.splice(index, 1);
+    setReviewData({ ...reviewData, videos: newVideos });
   };
 
   useEffect(() => {
@@ -265,14 +331,15 @@ const Product = () => {
               <img
                 onClick={() => setImage(item)}
                 key={index}
-                src={item}
+                src={getProductThumbnail(item)}
                 alt=""
                 className="w-[24%] cursor-pointer sm:w-full sm:mb-3 flex-shrink-0"
+                loading="lazy"
               />
             ))}
           </div>
           <div className="w-full sm:w-[80%]">
-            <img src={image} className="w-full h-auto" alt="" />
+            <img src={getProductDetail(image)} className="w-full h-auto" alt="" loading="lazy" />
           </div>
         </div>
 
@@ -540,6 +607,75 @@ const Product = () => {
                   )}
                 </div>
 
+                {/* Videos */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">
+                    Add Videos (optional, max 2 videos, 30MB each)
+                  </label>
+                  
+                  {/* Existing videos (edit mode only) */}
+                  {editingReview && reviewData.existingVideos.length > 0 && (
+                    <div className="mb-2">
+                      <p className="text-xs text-gray-500 mb-1">Existing videos:</p>
+                      <div className="flex gap-2 flex-wrap">
+                        {reviewData.existingVideos.map((videoUrl, index) => (
+                          <div key={index} className="relative">
+                            <video
+                              src={getReviewVideo(videoUrl)}
+                              className="w-32 h-20 object-cover rounded"
+                              muted
+                              playsInline
+                              preload="none"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeExistingVideo(videoUrl)}
+                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* New video upload */}
+                  <input
+                    type="file"
+                    accept="video/*"
+                    multiple
+                    onChange={handleVideoChange}
+                    disabled={reviewData.videos.length + reviewData.existingVideos.length >= 2}
+                    className="text-sm mb-1"
+                  />
+                  <p className="text-xs text-gray-500">Accepted formats: MP4, WebM, MOV</p>
+                  
+                  {/* New videos preview */}
+                  {reviewData.videos.length > 0 && (
+                    <div className="flex gap-2 mt-2 flex-wrap">
+                      {reviewData.videos.map((file, index) => (
+                        <div key={index} className="relative">
+                          <video
+                            src={URL.createObjectURL(file)}
+                            className="w-32 h-20 object-cover rounded"
+                            muted
+                            playsInline
+                            preload="none"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeVideo(index)}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <div className="flex gap-2">
                   <button
                     type="submit"
@@ -552,7 +688,7 @@ const Product = () => {
                     onClick={() => {
                       setShowReviewForm(false);
                       setEditingReview(false);
-                      setReviewData({ rating: 5, comment: '', images: [], existingImages: [] });
+                      setReviewData({ rating: 5, comment: '', images: [], existingImages: [], videos: [], existingVideos: [] });
                     }}
                     className="border border-gray-300 px-6 py-2 text-sm"
                   >
@@ -591,7 +727,7 @@ const Product = () => {
                       <p className="text-sm text-gray-700 mb-2">{review.comment}</p>
                     )}
                     {review.images && review.images.length > 0 && (
-                      <div className="flex gap-2 flex-wrap">
+                      <div className="flex gap-2 flex-wrap mb-2">
                         {review.images.map((img, idx) => (
                           <img
                             key={idx}
@@ -599,6 +735,23 @@ const Product = () => {
                             alt="review"
                             className="w-24 h-24 object-cover rounded cursor-pointer"
                             onClick={() => window.open(img, '_blank')}
+                            loading="lazy"
+                          />
+                        ))}
+                      </div>
+                    )}
+                    {review.videos && review.videos.length > 0 && (
+                      <div className="flex gap-2 flex-wrap">
+                        {review.videos.map((vid, idx) => (
+                          <video
+                            key={idx}
+                            src={getReviewVideo(vid)}
+                            className="w-48 h-32 object-cover rounded"
+                            controls
+                            muted
+                            playsInline
+                            preload="none"
+                            loading="lazy"
                           />
                         ))}
                       </div>

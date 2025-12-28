@@ -31,6 +31,9 @@ const Navbar = () => {
         <NavLink to="/collection" className="christmas-nav-link">
           <p>COLLECTION</p>
         </NavLink>
+        <NavLink to="/vouchers" className="christmas-nav-link">
+          <p>VOUCHERS</p>
+        </NavLink>
         <NavLink to="/about" className="christmas-nav-link">
           <p>ABOUT</p>
         </NavLink>

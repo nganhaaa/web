@@ -1,0 +1,56 @@
+=== MOMO TEST CREDENTIALS - KHÔNG MẤT TIỀN ===
+
+📌 CREDENTIALS SET 1 (Hiện đang dùng):
+MOMO_PARTNER_CODE="MOMOBKUN20180529"
+MOMO_ACCESS_KEY="klm05TvNBzhg7h7j"
+MOMO_SECRET_KEY="at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa"
+
+📌 CREDENTIALS SET 2 (Backup):
+MOMO_PARTNER_CODE="MOMO"
+MOMO_ACCESS_KEY="F8BBA842ECF85"
+MOMO_SECRET_KEY="K951B6PE1waDMi640xX08PD3vg6EkVlz"
+
+📌 CREDENTIALS SET 3 (Backup):
+MOMO_PARTNER_CODE="MOMOIQA420180417"
+MOMO_ACCESS_KEY="SvDmj2cOTYZmQQ3H"
+MOMO_SECRET_KEY="PPuDXq1KowPT1ftR8DvlQTHhC03aul17"
+
+=== THÔNG TIN THẺ TEST ===
+
+🏧 Thẻ ATM Napas 247:
+Số thẻ: 9704 0000 0000 0018
+Tên chủ thẻ: NGUYEN VAN A
+Ngày phát hành: 03/07
+SDT: 0347207835
+OTP: OTP (nhập chữ "OTP")
+
+💳 Thẻ Visa Test:
+Số thẻ: 5200 0000 0000 0114
+CVV: 123
+Ngày hết hạn: 12/25
+
+💳 Thẻ Mastercard Test:
+Số thẻ: 5555 5555 5555 4444
+CVV: 123
+Ngày hết hạn: 12/25
+
+=== HƯỚNG DẪN SỬ DỤNG ===
+
+1. Nếu bị lỗi "Giao dịch bị từ chối":
+   - Copy SET 2 hoặc SET 3 vào file .env
+   - Restart server
+   - Test lại
+
+2. Endpoint test (đã đúng):
+   https://test-payment.momo.vn/v2/gateway/api/create
+
+3. Request Type:
+   - payWithATM: Thanh toán thẻ ATM
+   - captureWallet: Thanh toán QR Code
+   - payWithCC: Thanh toán thẻ tín dụng
+
+=== LƯU Ý ===
+- Tất cả credentials trên là TEST - KHÔNG MẤT TIỀN THẬT
+- MoMo test environment có giới hạn quota
+- Nếu tất cả đều lỗi → đăng ký tài khoản developer riêng tại https://developers.momo.vn/
+- Production cần credentials thật từ MoMo Business
