@@ -20,9 +20,14 @@ const Livestream = () => {
     setProductList(products);
   }, [products]);
 
-  // Lấy username từ token hoặc localStorage
+  // Lấy username từ localStorage (ưu tiên), nếu không có thì lấy từ token
   useEffect(() => {
     const getUserInfo = async () => {
+      let storedName = localStorage.getItem('username');
+      if (storedName) {
+        setUsername(storedName);
+        return;
+      }
       if (token) {
         try {
           const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'}/api/users/profile`, {
@@ -32,14 +37,15 @@ const Livestream = () => {
           });
           const data = await response.json();
           if (data.success && data.user) {
-            setUsername(data.user.name || 'Khách');
+            setUsername(data.user.name || 'Guest');
+          } else {
+            setUsername('Guest');
           }
-        } catch (error) {
-          console.error('Error fetching user info:', error);
-          setUsername('Khách');
+        } catch {
+          setUsername('Guest');
         }
       } else {
-        setUsername('Khách');
+        setUsername('Guest');
       }
     };
     getUserInfo();
@@ -148,13 +154,10 @@ const Livestream = () => {
     };
   }, [username]);
 
+  // When sending comment from client, always use the username state (from DB or fallback)
   const handleSend = () => {
     if (input.trim()) {
-      const comment = { 
-        text: input, 
-        username: username,
-        timestamp: Date.now()
-      };
+      const comment = { text: input, time: new Date().toISOString(), username };
       socket.emit('send-comment', comment);
       setInput('');
     }
@@ -166,7 +169,7 @@ const Livestream = () => {
 
   return (
     <div className="flex flex-col items-center w-full min-h-[70vh] py-8 px-2">
-      <h2 className="text-2xl font-bold mb-4">🎥 Livestream</h2>
+      <h2 className="text-2xl font-bold mb-4">Livestream</h2>
       {streamStarted ? (
         <div className="w-full max-w-5xl bg-white/90 rounded-xl shadow-xl flex flex-col md:flex-row overflow-hidden">
           <div className="flex-1 flex flex-col items-center justify-center p-4">
@@ -177,65 +180,47 @@ const Livestream = () => {
               className="w-full h-[360px] md:h-[480px] object-contain bg-black rounded-xl" 
             />
             {highlightedProduct && (
-              <div className="bg-gradient-to-r from-red-50 to-green-50 p-4 rounded-lg shadow-lg my-4 flex items-center gap-3 w-full max-w-md mx-auto border-2 border-red-200">
+              <div className="bg-white/90 p-4 rounded shadow my-4 flex items-center gap-3 w-full max-w-md mx-auto">
                 <img 
                   src={highlightedProduct.image?.[0]} 
                   alt={highlightedProduct.name} 
-                  className="w-20 h-20 object-cover rounded-lg shadow-md" 
+                  className="w-16 h-16 object-cover rounded" 
                 />
-                <div className="flex-1">
-                  <div className="text-red-600 font-bold text-sm mb-1">⭐ Sản phẩm nổi bật</div>
-                  <div className="font-semibold text-gray-800">{highlightedProduct.name}</div>
-                  <div className="text-red-600 font-bold text-lg">
-                    {highlightedProduct.price} {highlightedProduct.currency || '$'}
-                  </div>
+                <div>
+                  <b>Highlighted product:</b> {highlightedProduct.name}
+                  <div className="text-red-600 font-bold">{highlightedProduct.price} {highlightedProduct.currency || '$'}</div>
                 </div>
               </div>
             )}
           </div>
           
           <div className="flex flex-col justify-between p-4 w-full md:w-96 border-l border-gray-200 bg-gradient-to-b from-white to-gray-50">
-            <div className="flex items-center gap-4 mb-4 pb-3 border-b border-gray-200">
-              <button 
-                onClick={handleLike} 
-                className="text-3xl hover:scale-125 transition-transform active:scale-95"
-              >
-                ❤️
-              </button>
-              <span className="text-xl font-bold text-red-600">{likeCount}</span>
+            <div className="flex items-center gap-4 mb-4">
+              <button onClick={handleLike} className="text-red-500 text-2xl">❤️</button>
+              <span>{likeCount}</span>
+              <span className="text-gray-500">likes</span>
             </div>
             
-            <div className="mb-4 flex-1 max-h-96 overflow-y-auto bg-white rounded-lg p-3 shadow-inner">
-              <div className="space-y-2">
-                {comments.map((comment, index) => (
-                  <div 
-                    key={index} 
-                    className="p-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg shadow-sm hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-baseline gap-2">
-                      <span className="font-bold text-blue-600">
-                        {comment.username || 'Khách'}:
-                      </span>
-                      <span className="text-gray-800">{comment.text}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="mb-4 max-h-60 overflow-y-auto bg-white/80 rounded p-2 flex-1">
+              {comments.map((c, i) => (
+                <div key={i} className="text-left text-sm mb-1">
+                  <b>{c.username || 'Guest'}:</b> {c.text}
+                </div>
+              ))}
             </div>
             
             <div className="flex gap-2 mt-2">
               <input 
                 value={input} 
                 onChange={e => setInput(e.target.value)} 
-                onKeyPress={e => e.key === 'Enter' && handleSend()}
-                className="border-2 border-gray-300 rounded-lg px-3 py-2 flex-1 focus:border-blue-500 focus:outline-none" 
-                placeholder="Bình luận..." 
+                className="border rounded px-2 py-1 flex-1" 
+                placeholder="Comment..." 
               />
               <button 
                 onClick={handleSend} 
-                className="bg-gradient-to-r from-red-500 to-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-red-600 hover:to-green-700 transition-all shadow-md hover:shadow-lg active:scale-95"
+                className="christmas-btn-primary"
               >
-                Gửi
+                Send
               </button>
             </div>
           </div>
@@ -243,8 +228,8 @@ const Livestream = () => {
       ) : (
         <div className="text-center p-12 bg-white/80 rounded-xl shadow-lg">
           <div className="text-6xl mb-4">📺</div>
-          <div className="text-gray-600 text-lg">Chưa có livestream nào đang phát</div>
-          <div className="text-gray-400 text-sm mt-2">Hãy quay lại sau nhé!</div>
+          <div className="text-gray-500">No livestream is active</div>
+          <div className="text-gray-400 text-sm mt-2">Please check back later!</div>
         </div>
       )}
     </div>

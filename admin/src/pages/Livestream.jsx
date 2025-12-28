@@ -158,7 +158,7 @@ const AdminLivestream = () => {
       console.log('[Admin] Stream started');
     } catch (err) {
       console.error('[Admin] Error accessing media:', err);
-      alert('Không thể truy cập camera/microphone. Vui lòng kiểm tra quyền truy cập.');
+      alert('Cannot access camera/microphone. Please check your permissions.');
     }
   };
 
@@ -221,7 +221,7 @@ const AdminLivestream = () => {
                 </div>
               )}
               <div className="absolute top-4 right-4 bg-black/70 text-white px-4 py-2 rounded-full font-semibold">
-                👥 {connectedClients.length} người xem
+                 {connectedClients.length} viewers
               </div>
             </div>
             
@@ -231,14 +231,14 @@ const AdminLivestream = () => {
                 disabled={streaming}
                 className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-md hover:shadow-lg disabled:cursor-not-allowed"
               >
-                ▶️ Start Stream
+                Start Stream
               </button>
               <button
                 onClick={handleStopStream}
                 disabled={!streaming}
                 className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-md hover:shadow-lg disabled:cursor-not-allowed"
               >
-                ⏹️ Stop Stream
+                Stop Stream
               </button>
             </div>
           </div>
@@ -249,14 +249,15 @@ const AdminLivestream = () => {
           <div className="flex items-center gap-4 mb-4 pb-4 border-b border-gray-200">
             <div className="text-3xl">❤️</div>
             <div className="text-2xl font-bold text-red-600">{likeCount}</div>
-            <span className="text-gray-500">lượt thích</span>
+            <span className="text-gray-500">likes</span>
           </div>
           
-          <h3 className="font-bold text-lg mb-3">💬 Bình luận ({comments.length})</h3>
+          {/* Comment section (English, show user name) */}
+          <h3 className="font-bold text-lg mb-3">💬 Comments ({comments.length})</h3>
           <div className="max-h-96 overflow-y-auto bg-gray-50 rounded-lg p-3 space-y-2">
             {comments.length === 0 ? (
               <div className="text-gray-400 text-center py-8">
-                Chưa có bình luận nào
+                No comments yet
               </div>
             ) : (
               comments.map((comment, index) => (
@@ -266,7 +267,7 @@ const AdminLivestream = () => {
                 >
                   <div className="flex items-baseline gap-2">
                     <span className="font-bold text-blue-600">
-                      {comment.username || 'Khách'}:
+                      {comment.username || 'Guest'}:
                     </span>
                     <span className="text-gray-800">{comment.text}</span>
                   </div>
@@ -279,7 +280,7 @@ const AdminLivestream = () => {
 
       {/* Product Highlight Section */}
       <div className="mt-6 bg-white rounded-xl shadow-lg p-6">
-        <h3 className="text-xl font-bold mb-4">⭐ Highlight Sản phẩm</h3>
+        <h3 className="text-xl font-bold mb-4">⭐ Highlight Product</h3>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-4">
           {products.map(product => (
             <div
@@ -310,7 +311,7 @@ const AdminLivestream = () => {
           disabled={!productId || !streaming}
           className="w-full bg-yellow-500 hover:bg-yellow-600 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-md hover:shadow-lg disabled:cursor-not-allowed"
         >
-          🌟 Highlight Sản phẩm đã chọn
+          🌟 Highlight selected product
         </button>
       </div>
     </div>
