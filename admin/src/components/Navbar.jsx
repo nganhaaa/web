@@ -7,9 +7,9 @@ const Navbar = ({setToken}) => {
     <div className='christmas-navbar flex items-center justify-between py-4 px-[4%]'>
       <div className="flex items-center gap-3">
         <img className='w-[max(10%,80px)] brightness-0 invert' src={assets.logo} alt="" />
-        <span className="text-white font-bold text-xl hidden sm:block">🎄 Admin Panel</span>
+        <span className="text-white font-bold text-xl hidden sm:block">Admin Panel</span>
       </div>
-      <button onClick={() => setToken('')} className='christmas-button'>Logout 🎅</button>
+      <button onClick={() => setToken('')} className='christmas-button'>Logout</button>
     </div>
   )
 }

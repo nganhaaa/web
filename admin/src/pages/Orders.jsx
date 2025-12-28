@@ -100,7 +100,7 @@ const Orders = ({token}) => {
   return (
     <div className="my-8">
       <div className="flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center mb-4">
-        <h2 className="christmas-form-title">🛒 Order List</h2>
+        <h2 className="christmas-form-title">Order List</h2>
         
         {/* Search Box */}
         <div className="christmas-search-box inline-flex items-center justify-center">

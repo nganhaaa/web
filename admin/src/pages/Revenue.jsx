@@ -206,8 +206,8 @@ const Revenue = ({token}) => {
   ];
 
   return (
-    <div className="christmas-revenue-container my-8">
-      <h1 className="christmas-card-title text-2xl mb-6">📊 Revenue Analytics Dashboard</h1>
+    <div className="my-8">
+      <h1 className="christmas-card-title text-2xl mb-6">Revenue Analytics Dashboard</h1>
       
       <div className="flex flex-col md:flex-row gap-4">
         <div className="md:w-[66%] christmas-card">

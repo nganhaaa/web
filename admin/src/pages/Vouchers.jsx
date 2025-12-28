@@ -159,7 +159,7 @@ const Vouchers = ({ token }) => {
   return (
     <div className="my-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="christmas-form-title">🎟️ Voucher Management</h2>
+        <h2 className="christmas-form-title">Voucher Management</h2>
         <button 
           onClick={() => setShowForm(!showForm)}
           className="christmas-submit-btn"

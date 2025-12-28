@@ -72,7 +72,7 @@ const Add = ({token}) => {
   return (
     <>
       <form onSubmit={handleSubmit} className="flex flex-col w-full items-start gap-3 my-8">
-        <h2 className="christmas-form-title">🎁 Add New Product</h2>
+        <h2 className="christmas-form-title">Add New Product</h2>
         
         <div>
           <p className="christmas-label mb-2">Upload Image</p>

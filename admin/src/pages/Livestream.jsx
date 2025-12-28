@@ -200,7 +200,7 @@ const AdminLivestream = () => {
 
   return (
     <div className="admin-livestream p-6">
-      <h2 className="text-2xl font-bold mb-6">🎥 Admin Livestream Control</h2>
+      <h2 className="text-2xl font-bold mb-6">Admin Livestream Control</h2>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Video Preview */}
@@ -280,7 +280,7 @@ const AdminLivestream = () => {
 
       {/* Product Highlight Section */}
       <div className="mt-6 bg-white rounded-xl shadow-lg p-6">
-        <h3 className="text-xl font-bold mb-4">⭐ Highlight Product</h3>
+        <h3 className="text-xl font-bold mb-4">Highlight Product</h3>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-4">
           {products.map(product => (
             <div
@@ -311,7 +311,7 @@ const AdminLivestream = () => {
           disabled={!productId || !streaming}
           className="w-full bg-yellow-500 hover:bg-yellow-600 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-md hover:shadow-lg disabled:cursor-not-allowed"
         >
-          🌟 Highlight selected product
+          Highlight selected product
         </button>
       </div>
     </div>

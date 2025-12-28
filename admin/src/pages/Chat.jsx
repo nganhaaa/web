@@ -238,7 +238,6 @@ const Chat = ({token}) => {
                       alt="avatar"
                       className="w-8 h-8 md:w-12 md:h-12 rounded-full border-2 border-red-300"
                     />
-                    <span className="absolute -top-1 -right-1 text-lg">🎁</span>
                   </div>
                   <div className="flex items-center">
                     <p className="font-medium text-gray-800 sm:text-base lg:text-lg">{user.username}</p>
@@ -277,7 +276,6 @@ const Chat = ({token}) => {
                 <div>
                   <h2 className="font-semibold text-gray-800 flex items-center gap-2">
                     {selectedUser.username}
-                    <span className="text-sm">🎄</span>
                   </h2>
                 </div>
               </div>
@@ -302,17 +300,8 @@ const Chat = ({token}) => {
                           : "bg-gradient-to-r from-green-100 to-green-200 text-gray-800"
                       }`}
                     >
-                      {msg.sender === "admin" && (
-                        <span className="absolute -right-2 -top-2 text-xl">🎅</span>
-                      )}
                       {msg.sender === "bot" && (
-                        <span className="absolute -left-2 -top-2 text-xl">🤖</span>
-                      )}
-                      {msg.sender !== "admin" && msg.sender !== "bot" && (
-                        <span className="absolute -left-2 -top-2 text-xl">🎁</span>
-                      )}
-                      {msg.sender === "bot" && (
-                        <div className="text-xs font-bold text-blue-600 mb-1">AI Bot 🤖</div>
+                        <div className="text-xs font-bold text-blue-600 mb-1">AI Bot</div>
                       )}
                       {msg.message}
                     </div>
@@ -330,10 +319,9 @@ const Chat = ({token}) => {
 
               {/* Message Input */}
               <div className="p-4 border-t-2 border-red-200 bg-gradient-to-r from-red-50 to-green-50 flex items-center space-x-2 mb-2 relative">
-                <span className="text-2xl">🎅</span>
                 <input
                   type="text"
-                  placeholder="Send Christmas message... 🎄"
+                  placeholder="Send message..."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
@@ -343,21 +331,15 @@ const Chat = ({token}) => {
                   onClick={sendMessage} 
                   className="sm:px-4 sm:py-2 bg-gradient-to-r from-red-600 to-green-600 rounded-full hover:scale-110 transition-transform p-2"
                 >
-                  <span className="text-white text-xl">🎁</span>
+                  <span className="text-white text-xl">Send</span>
                 </button>
               </div>
             </>
           ) : (
             <div className="flex-grow flex items-center justify-center bg-gradient-to-br from-red-50 to-green-50">
               <div className="text-center">
-                <div className="text-8xl mb-4 animate-bounce">🎅</div>
-                <div className="flex gap-4 justify-center mb-4 text-5xl">
-                  <span className="animate-bounce" style={{animationDelay: '0.1s'}}>🎄</span>
-                  <span className="animate-bounce" style={{animationDelay: '0.2s'}}>🎁</span>
-                  <span className="animate-bounce" style={{animationDelay: '0.3s'}}>⛄</span>
-                </div>
                 <h2 className="mt-4 text-xl text-gray-600 font-semibold">
-                  🎄 Merry Christmas! 🎄
+                  Merry Christmas!
                 </h2>
                 <p className="text-gray-500 mt-2">
                   Select a user to start chatting

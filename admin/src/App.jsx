@@ -37,7 +37,6 @@ const App = () => {
       ? <Login setToken={setToken}/>
       :<>
         <Navbar setToken={setToken}/>
-        <hr/>
         <div className="flex w-full">
           <Sidebar/>
           <div className="w-[70%] mx-auto ml-[max(5vw,25px)] text-gray-600 text-base">
