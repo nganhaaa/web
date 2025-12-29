@@ -3,7 +3,18 @@ import { useEffect, useRef, useState } from 'react';
 import { backendUrl } from '../App';
 import io from 'socket.io-client';
 
-const socket = io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000');
+// Tạo socket connection với options đúng cho cả local dev và Docker
+// - Local dev: VITE_BACKEND_URL undefined → 'http://localhost:4000'
+// - Docker: VITE_BACKEND_URL = "" → undefined (relative path qua nginx)
+const backendEnv = import.meta.env.VITE_BACKEND_URL;
+const socketUrl = backendEnv === undefined ? 'http://localhost:4000' : (backendEnv.trim() || undefined);
+
+const socket = io(socketUrl, {
+  transports: ['websocket', 'polling'],
+  reconnection: true,
+  reconnectionDelay: 1000,
+  reconnectionAttempts: 5
+});
 
 const AdminLivestream = () => {
   const videoRef = useRef(null);
@@ -106,7 +117,25 @@ const AdminLivestream = () => {
   // Create peer connection for new client
   const createPeerConnection = async (clientId, stream) => {
     const peer = new RTCPeerConnection({
-      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' },
+        {
+          urls: 'turn:openrelay.metered.ca:80',
+          username: 'openrelayproject',
+          credential: 'openrelayproject'
+        },
+        {
+          urls: 'turn:openrelay.metered.ca:443',
+          username: 'openrelayproject',
+          credential: 'openrelayproject'
+        },
+        {
+          urls: 'turn:openrelay.metered.ca:443?transport=tcp',
+          username: 'openrelayproject',
+          credential: 'openrelayproject'
+        }
+      ]
     });
     
     peersRef.current[clientId] = peer;

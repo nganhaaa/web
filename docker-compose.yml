@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   # MongoDB
   mongo:
@@ -21,6 +19,7 @@ services:
       dockerfile: Dockerfile
     container_name: backend1
     restart: unless-stopped
+    # No external port exposure - only accessible via nginx
     environment:
       - PORT=4000
       - MONGODB_URI=mongodb://root:example@mongo:27017/e-commerce?authSource=admin
@@ -41,6 +40,7 @@ services:
       dockerfile: Dockerfile
     container_name: backend2
     restart: unless-stopped
+    # No external port exposure - only accessible via nginx
     environment:
       - PORT=4000
       - MONGODB_URI=mongodb://root:example@mongo:27017/e-commerce?authSource=admin

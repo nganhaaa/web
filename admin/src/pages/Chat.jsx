@@ -110,10 +110,10 @@ const Chat = ({token}) => {
     // Reset messages when switching users
     setMessages([]);
 
-    // Join room for selected user
+    // Request messages for selected user (admin stays in 'admin' room)
     socket.emit('join', {
-      userId: selectedUser.userId,
-      adminId: 'admin'
+      userId: 'admin',
+      adminId: selectedUser.userId  // Tell server which user's messages to fetch
     });
 
     // Listen for previous messages

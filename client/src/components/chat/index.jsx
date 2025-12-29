@@ -50,14 +50,11 @@ const ChatBox = () => {
 
     // Initialize socket connection only once
     if (!socketRef.current) {
-      // Khi deploy, sử dụng relative path để Socket.IO tự động dùng cùng domain
-      // Khi dev, sử dụng URL đầy đủ
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
-      // Nếu URL là localhost không có port (deploy), sử dụng relative path
-      // undefined sẽ khiến Socket.IO tự động dùng cùng origin với trang web
-      const socketUrl = (backendUrl === 'http://localhost' || backendUrl === 'http://localhost/') 
-        ? undefined  // undefined = cùng origin (tự động dùng domain hiện tại)
-        : backendUrl;
+      // Logic cho cả local dev và Docker:
+      // - Local: VITE_BACKEND_URL undefined → 'http://localhost:4000'
+      // - Docker: VITE_BACKEND_URL = "" → undefined (relative path)
+      const backendEnv = import.meta.env.VITE_BACKEND_URL;
+      const socketUrl = backendEnv === undefined ? 'http://localhost:4000' : (backendEnv.trim() || undefined);
       
       socketRef.current = io(socketUrl, {
         transports: ['websocket', 'polling'],

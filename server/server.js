@@ -68,9 +68,6 @@ app.use('/api/voucher', voucherRouter);
 app.use('/api/review', reviewRouter);
 app.use('/api/spin', spinRouter);
 
-// WebSocket Connection
-io.on('connection', (socket) => handleConnection(socket, io));
-
 // Error handling middleware (must be last)
 app.use(errorMiddleware);
 
@@ -78,6 +75,8 @@ app.use(errorMiddleware);
 app.use((req, res) => {
     res.status(404).json({ success: false, message: 'Route not found' });
 });
+
+// WebSocket Connection - Only ONE listener!
 io.on('connection', (socket) => {
   handleConnection(socket, io); // chat
   handleLivestreamConnection(socket, io); // livestream

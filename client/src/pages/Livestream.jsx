@@ -32,7 +32,9 @@ const Livestream = () => {
       }
       if (token) {
         try {
-          const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'}/api/users/profile`, {
+          const backendEnv = import.meta.env.VITE_BACKEND_URL;
+          const backendUrl = backendEnv === undefined ? 'http://localhost:4000' : (backendEnv || '');
+          const response = await fetch(`${backendUrl}/api/users/profile`, {
             headers: {
               'token': token
             }
@@ -54,9 +56,20 @@ const Livestream = () => {
   }, [token]);
 
   useEffect(() => {
-    // Tạo socket connection
+    // Tạo socket connection với options giống chat component
     if (!socketRef.current) {
-      socketRef.current = io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000');
+      // Logic: 
+      // - Nếu VITE_BACKEND_URL không set (undefined) → local dev → dùng localhost:4000
+      // - Nếu VITE_BACKEND_URL là empty string "" → Docker → dùng undefined (relative path)
+      const backendEnv = import.meta.env.VITE_BACKEND_URL;
+      const socketUrl = backendEnv === undefined ? 'http://localhost:4000' : (backendEnv.trim() || undefined);
+      
+      socketRef.current = io(socketUrl, {
+        transports: ['websocket', 'polling'],
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionAttempts: 5
+      });
     }
     const socket = socketRef.current;
 
@@ -120,7 +133,25 @@ const Livestream = () => {
         }
         
         const peer = new RTCPeerConnection({
-          iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+          iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:stun1.l.google.com:19302' },
+            {
+              urls: 'turn:openrelay.metered.ca:80',
+              username: 'openrelayproject',
+              credential: 'openrelayproject'
+            },
+            {
+              urls: 'turn:openrelay.metered.ca:443',
+              username: 'openrelayproject',
+              credential: 'openrelayproject'
+            },
+            {
+              urls: 'turn:openrelay.metered.ca:443?transport=tcp',
+              username: 'openrelayproject',
+              credential: 'openrelayproject'
+            }
+          ]
         });
         peerRef.current = peer;
 
@@ -128,6 +159,11 @@ const Livestream = () => {
           console.log('[Client] Received media stream');
           if (videoRef.current) {
             videoRef.current.srcObject = event.streams[0];
+            // Force play video (autoplay might be blocked)
+            videoRef.current.play().catch(err => {
+              console.error('[Client] Video play error:', err);
+              // If autoplay blocked, user needs to click play
+            });
           }
         };
 
@@ -221,6 +257,8 @@ const Livestream = () => {
               ref={videoRef} 
               autoPlay 
               playsInline
+              muted={false}
+              controls
               className="w-full h-[360px] md:h-[480px] object-contain bg-black rounded-xl" 
             />
             {highlightedProduct && (

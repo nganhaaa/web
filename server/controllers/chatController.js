@@ -7,26 +7,29 @@ const handleConnection = (socket, io) => {
 
   // Listen for the join event to send previous messages
   socket.on('join', async ({ userId, adminId }) => {
-    // If admin is joining, join admin room only
-    if (adminId === 'admin' && userId !== 'admin') {
-      socket.join('admin'); // Admin joins admin room to receive all admin messages
-      console.log(`🔑 Admin socket ${socket.id} joined 'admin' room to view user ${userId}`);
+    // Check if this is admin joining (admin viewing user chats)
+    if (userId === 'admin') {
+      // Admin socket joins admin room to receive all messages
+      socket.join('admin');
+      console.log(`🔑 Admin socket ${socket.id} joined 'admin' room`);
     } else {
-      // Regular user joins their own private room
+      // Regular user joins their own private room using their userId
       socket.join(userId);
       console.log(`👤 User ${userId} (socket ${socket.id}) joined their private room '${userId}'`);
     }
 
     // Fetch previous messages between the user and admin
+    // For admin viewing specific user: use adminId parameter to determine which user's messages to fetch
+    const targetUserId = (userId === 'admin' && adminId) ? adminId : userId;
     try {
       const messages = await ChatMessage.find({
         $or: [
-          { sender: userId, receiver: adminId },
-          { sender: adminId, receiver: userId },
-          { sender: 'bot', receiver: userId },
+          { sender: targetUserId, receiver: 'admin' },
+          { sender: 'admin', receiver: targetUserId },
+          { sender: 'bot', receiver: targetUserId },
         ],
       }).sort({ timestamp: 1 }); // Sort by timestamp ascending
-      console.log(`📨 Sending ${messages.length} previous messages for user ${userId} to admin`);
+      console.log(`📨 Sending ${messages.length} previous messages for user ${targetUserId}`);
       socket.emit('previousMessages', messages);
     } catch (error) {
       console.error('Failed to fetch messages', error);
@@ -40,27 +43,19 @@ const handleConnection = (socket, io) => {
     
     console.log(`📤 Message saved: ${msg.sender} -> ${msg.receiver}: ${msg.message.substring(0, 50)}...`);
     
-    // Send the message to the SPECIFIC receiver room only
+    // Broadcast to receiver's room (not sender - they already have it)
     if (msg.receiver === 'admin') {
-      // Message to admin: send to admin room
-      console.log(`   ➡️ Emitting to 'admin' room`);
+      // User -> Admin: send to admin room only
+      console.log(`   ➡️ Broadcasting to 'admin' room`);
       io.to('admin').emit('privateMessage', msg);
     } else {
-      // Message to user: send to that specific user's room only
-      console.log(`   ➡️ Emitting to room '${msg.receiver}'`);
+      // Admin -> User: send to that user's room only  
+      console.log(`   ➡️ Broadcasting to '${msg.receiver}' room`);
       io.to(msg.receiver).emit('privateMessage', msg);
     }
     
-    // Send confirmation back to sender
-    if (msg.sender === 'admin') {
-      // Admin sent message: confirm in admin room
-      console.log(`   ✅ Confirming to 'admin' room (sender)`);
-      io.to('admin').emit('privateMessage', msg);
-    } else {
-      // User sent message: confirm in their room only
-      console.log(`   ✅ Confirming to room '${msg.sender}' (sender)`);
-      io.to(msg.sender).emit('privateMessage', msg);
-    }
+    // Echo back to sender for confirmation
+    socket.emit('privateMessage', msg);
 
     // 🤖 AI Auto-response: Only if admin hasn't responded recently
     if (msg.receiver === 'admin' && msg.sender !== 'admin' && shouldRespondWithAI(msg.message, msg.sender)) {
