@@ -116,27 +116,31 @@ const AdminLivestream = () => {
 
   // Create peer connection for new client
   const createPeerConnection = async (clientId, stream) => {
-    const peer = new RTCPeerConnection({
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' },
-        {
-          urls: 'turn:openrelay.metered.ca:80',
-          username: 'openrelayproject',
-          credential: 'openrelayproject'
-        },
-        {
-          urls: 'turn:openrelay.metered.ca:443',
-          username: 'openrelayproject',
-          credential: 'openrelayproject'
-        },
-        {
-          urls: 'turn:openrelay.metered.ca:443?transport=tcp',
-          username: 'openrelayproject',
-          credential: 'openrelayproject'
-        }
-      ]
-    });
+  const peer = new RTCPeerConnection({
+  iceTransportPolicy: 'relay',
+  iceServers: [
+    {       
+        urls: "turn:global.relay.metered.ca:80",
+        username: "9bb4d063470965c90fe9e1d1",
+        credential: "ESShMclPbJuTHQzA",
+      },
+      {
+        urls: "turn:global.relay.metered.ca:80?transport=tcp",
+        username: "9bb4d063470965c90fe9e1d1",
+        credential: "ESShMclPbJuTHQzA",
+      },
+      {
+        urls: "turn:global.relay.metered.ca:443",
+        username: "9bb4d063470965c90fe9e1d1",
+        credential: "ESShMclPbJuTHQzA",
+      },
+      {
+        urls: "turns:global.relay.metered.ca:443?transport=tcp",
+        username: "9bb4d063470965c90fe9e1d1",
+        credential: "ESShMclPbJuTHQzA",
+      },
+  ]
+});
     
     peersRef.current[clientId] = peer;
     
