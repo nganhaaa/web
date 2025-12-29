@@ -54,7 +54,10 @@ connectDB().then(() => {
 
 // Middlewares
 app.use(cors());
-app.use(express.json());
+// Increase JSON body size limit (50MB)
+app.use(express.json({ limit: '50mb' }));
+// Add urlencoded parser for FormData with increased limit (50MB)
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // API Endpoints
 app.use('/api/users', userRouter);
