@@ -8,7 +8,8 @@ const requiredEnvVars = [
     'CLOUDINARY_API_SECRET',
     'MOMO_PARTNER_CODE',
     'MOMO_ACCESS_KEY',
-    'MOMO_SECRET_KEY'
+    'MOMO_SECRET_KEY',
+    'GOOGLE_CLIENT_ID'
 ];
 
 const checkEnvVars = () => {
