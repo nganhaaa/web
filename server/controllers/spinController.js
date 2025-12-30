@@ -55,25 +55,41 @@ const spinWheel = async (req, res) => {
             }
         }
         
-        // Random spin result with weighted probability
-        // 40% - Better luck next time
-        // 30% - 1% OFF
-        // 20% - 2% OFF
-        // 8% - 5% OFF
-        // 2% - 10% OFF
-        const random = Math.random() * 100;
-        let result;
+        // PRIZES array matching frontend (MUST BE IDENTICAL)
+        const PRIZES = [
+            { label: '10%', discount: 10, probability: 2 },   // index 0
+            { label: '5%', discount: 5, probability: 8 },     // index 1
+            { label: '2%', discount: 2, probability: 20 },    // index 2
+            { label: '1%', discount: 1, probability: 30 },    // index 3
+            { label: 'Try Again', discount: 0, probability: 10 }, // index 4
+            { label: '10%', discount: 10, probability: 0 },   // index 5 (duplicate, won't be selected)
+            { label: '2%', discount: 2, probability: 0 },     // index 6 (duplicate, won't be selected)
+            { label: 'Try Again', discount: 0, probability: 30 }, // index 7
+        ];
         
-        if (random < 40) {
-            result = { type: 'nothing', discount: 0, message: '😢 Better luck next time!' };
-        } else if (random < 70) {
-            result = { type: 'voucher', discount: 1, message: '🎉 You won 1% OFF!' };
-        } else if (random < 90) {
-            result = { type: 'voucher', discount: 2, message: '🎉 You won 2% OFF!' };
-        } else if (random < 98) {
-            result = { type: 'voucher', discount: 5, message: '🎊 Amazing! You won 5% OFF!' };
+        // Create weighted array for random selection
+        const weightedPrizes = [];
+        PRIZES.forEach((prize, index) => {
+            for (let i = 0; i < prize.probability; i++) {
+                weightedPrizes.push(index);
+            }
+        });
+        
+        // Random selection
+        const randomIndex = weightedPrizes[Math.floor(Math.random() * weightedPrizes.length)];
+        const selectedPrize = PRIZES[randomIndex];
+        
+        let result = {
+            index: randomIndex, // IMPORTANT: Return index for frontend
+            discount: selectedPrize.discount
+        };
+        
+        if (selectedPrize.discount === 0) {
+            result.type = 'nothing';
+            result.message = '😢 Better luck next time!';
         } else {
-            result = { type: 'voucher', discount: 10, message: '🎁 JACKPOT! You won 10% OFF!' };
+            result.type = 'voucher';
+            result.message = `🎉 You won ${selectedPrize.discount}% OFF!`;
         }
         
         // Update or create spin record
@@ -129,6 +145,7 @@ const spinWheel = async (req, res) => {
     }
 };
 
+// ⚠️ QUAN TRỌNG: Phải có export ở cuối file
 export {
     checkSpinStatus,
     spinWheel

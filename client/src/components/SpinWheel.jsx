@@ -78,15 +78,29 @@ const SpinWheel = ({ onResult }) => {
         setIsSpinning(false);
         return;
       }
-      // Calculate rotation following the reference code pattern
-      const prizeIndex = data.result?.index ?? Math.floor(Math.random() * numSegments);
-      const randomSpin = prizeIndex * segmentAngle;
-      const totalRotation = rotation + 360 * 5 + randomSpin;
+      
+      console.log('Backend response:', data.result);
+      
+      // Get prize index directly from backend
+      const prizeIndex = data.result?.index ?? 0;
+      
+      console.log('Prize index:', prizeIndex);
+      console.log('Landing on:', PRIZES[prizeIndex]);
+      
+      // Calculate rotation
+      const degreesPerSegment = 360 / numSegments;
+      const segmentCenterDegree = (prizeIndex * degreesPerSegment) + (degreesPerSegment / 2);
+      const targetRotation = 360 - segmentCenterDegree;
+      const spins = 360 * 5;
+      const totalRotation = rotation + spins + targetRotation;
+      
+      console.log('Rotating to:', totalRotation);
+      
       setRotation(totalRotation);
+      
       // Show result after animation completes
       setTimeout(() => {
-        const winningIndex = (numSegments - Math.floor(randomSpin / segmentAngle)) % numSegments;
-        setSelectedPrizeIndex(winningIndex);
+        setSelectedPrizeIndex(prizeIndex);
         setResult(data.result);
         setCanSpin(false);
         setIsSpinning(false);
@@ -219,7 +233,7 @@ const SpinWheel = ({ onResult }) => {
       </button>
       {/* Result Display */}
       {result && (
-        <div className={`max-w-2xl mx-auto my-8 p-8 rounded-2xl border-4 text-center animate-bounce ${
+        <div className={`max-w-2xl mx-auto my-8 p-8 rounded-2xl border-4 text-center animate-[bounce_0.6s_ease-out_2] ${
           result.type === 'voucher' 
             ? 'border-green-600 bg-gradient-to-br from-green-50 to-emerald-50' 
             : 'border-gray-400 bg-gray-50'

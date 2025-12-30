@@ -253,17 +253,6 @@ const Vouchers = () => {
     );
   };
 
-  const prizes = [
-    { label: '1%', color: '#FF6B9D', discount: 1, emoji: '🎁' },
-    { label: 'Try Again', color: '#95E1D3', discount: 0, emoji: '🔄' },
-    { label: '2%', color: '#FFD93D', discount: 2, emoji: '⭐' },
-    { label: 'Try Again', color: '#6BCB77', discount: 0, emoji: '🔄' },
-    { label: '5%', color: '#4D96FF', discount: 5, emoji: '🎊' },
-    { label: 'Try Again', color: '#FE6244', discount: 0, emoji: '🔄' },
-    { label: '10%', color: '#9B59B6', discount: 10, emoji: '💎' },
-    { label: 'Try Again', color: '#3498DB', discount: 0, emoji: '🔄' },
-  ];
-
   return (
     <div className="border-t pt-10 min-h-screen relative">
       {/* Background image with overlay */}
