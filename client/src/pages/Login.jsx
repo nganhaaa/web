@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const [currentState, setCurrentState] = useState('Login');
@@ -48,6 +49,38 @@ const Login = () => {
       console.log(error);
       toast.error(error.message);
     }
+  };
+
+  // Google Login Handler
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const response = await axios.post(backendUrl + '/api/users/google-login', {
+        credential: credentialResponse.credential
+      });
+      
+      if (response.data.success) {
+        setToken(response.data.token);
+        setUserId(response.data.userId);
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userId', response.data.userId);
+        localStorage.setItem('username', response.data.name);
+        localStorage.setItem('user', JSON.stringify({ 
+          name: response.data.name, 
+          email: response.data.email,
+          avatar: response.data.avatar 
+        }));
+        toast.success('Đăng nhập Google thành công!');
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error('Lỗi đăng nhập Google');
+    }
+  };
+
+  const handleGoogleError = () => {
+    toast.error('Đăng nhập Google thất bại');
   };
 
   useEffect(() => {
@@ -179,6 +212,26 @@ const Login = () => {
                   {currentState === 'Login' ? 'Sign In' : 'Create Account'}
                 </button>
               </form>
+
+              {/* Divider */}
+              <div className="flex items-center my-6">
+                <div className="flex-1 border-t border-gray-300"></div>
+                <span className="px-4 text-gray-500 text-sm">OR</span>
+                <div className="flex-1 border-t border-gray-300"></div>
+              </div>
+
+              {/* Google Login Button */}
+              <div className="flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleError}
+                  theme="filled_blue"
+                  size="large"
+                  text={currentState === 'Login' ? 'signin_with' : 'signup_with'}
+                  shape="rectangular"
+                  width="100%"
+                />
+              </div>
 
               {/* Toggle between Login/Signup */}
               <div className="mt-8 text-center">

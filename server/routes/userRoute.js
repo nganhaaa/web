@@ -7,6 +7,7 @@ import {
     listAdmins,
     listAllUsers
 } from '../controllers/userController.js';
+import { googleLogin, googleLoginAdmin } from '../controllers/googleAuthController.js';
 import adminAuth from '../middleware/adminAuth.js';
 
 const userRouter = express.Router();
@@ -15,6 +16,10 @@ const userRouter = express.Router();
 userRouter.post('/login', loginUser);
 userRouter.post('/register', registerUser);
 userRouter.post('/admin', loginAdmin);
+
+// Google OAuth routes
+userRouter.post('/google-login', googleLogin);
+userRouter.post('/google-login-admin', googleLoginAdmin);
 
 // Admin only routes
 userRouter.post('/create-admin', adminAuth, createAdmin);
