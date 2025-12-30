@@ -27,6 +27,13 @@ const Login = ({setToken}) => {
   // Google Login Handler for Admin
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
+      console.log('🔍 Google credential received, sending to backend...');
+      
+      if (!credentialResponse.credential) {
+        toast.error('Không nhận được credential từ Google');
+        return;
+      }
+      
       const response = await axios.post(backendUrl + '/api/users/google-login-admin', {
         credential: credentialResponse.credential
       });
@@ -35,16 +42,26 @@ const Login = ({setToken}) => {
         setToken(response.data.token);
         toast.success('Đăng nhập Google thành công!');
       } else {
-        toast.error(response.data.message);
+        toast.error(response.data.message || 'Đăng nhập thất bại');
       }
     } catch (error) {
-      console.log(error);
-      toast.error('Lỗi đăng nhập Google');
+      console.error('❌ Google Login Error:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Lỗi đăng nhập Google';
+      toast.error(errorMessage);
     }
   };
 
-  const handleGoogleError = () => {
-    toast.error('Đăng nhập Google thất bại');
+  const handleGoogleError = (error) => {
+    console.error('❌ Google OAuth Error:', error);
+    if (error?.error === 'popup_closed_by_user') {
+      toast.error('Bạn đã đóng cửa sổ đăng nhập');
+    } else if (error?.error === 'access_denied') {
+      toast.error('Bạn đã từ chối quyền truy cập');
+    } else if (error?.error === 'popup_blocked') {
+      toast.error('Cửa sổ popup bị chặn. Vui lòng cho phép popup cho trang web này');
+    } else {
+      toast.error('Lỗi đăng nhập Google: ' + (error?.error || 'Unknown error'));
+    }
   };
 
   return (

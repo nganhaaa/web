@@ -3,7 +3,15 @@ import userModel from '../models/userModel.js';
 import adminModel from '../models/adminModel.js';
 import jwt from 'jsonwebtoken';
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+
+// Validate Client ID
+if (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID_HERE') {
+    console.error('❌ GOOGLE_CLIENT_ID chưa được cấu hình đúng trong file .env');
+    console.error('Vui lòng thêm GOOGLE_CLIENT_ID vào server/.env');
+}
+
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET);
@@ -17,7 +25,7 @@ const googleLogin = async (req, res) => {
         // Verify the Google token
         const ticket = await client.verifyIdToken({
             idToken: credential,
-            audience: process.env.GOOGLE_CLIENT_ID,
+            audience: GOOGLE_CLIENT_ID,
         });
 
         const payload = ticket.getPayload();
@@ -67,10 +75,21 @@ const googleLoginAdmin = async (req, res) => {
     try {
         const { credential } = req.body;
 
+        if (!credential) {
+            return res.json({ success: false, message: 'Missing Google credential' });
+        }
+
+        if (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID_HERE') {
+            console.error('❌ GOOGLE_CLIENT_ID chưa được cấu hình');
+            return res.json({ success: false, message: 'Server configuration error: Google Client ID not configured' });
+        }
+
+        console.log('🔍 Verifying Google token with Client ID:', GOOGLE_CLIENT_ID.substring(0, 20) + '...');
+
         // Verify the Google token
         const ticket = await client.verifyIdToken({
             idToken: credential,
-            audience: process.env.GOOGLE_CLIENT_ID,
+            audience: GOOGLE_CLIENT_ID,
         });
 
         const payload = ticket.getPayload();
@@ -105,8 +124,25 @@ const googleLoginAdmin = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: 'Google authentication failed' });
+        console.error('❌ Google Admin Login Error:', error.message);
+        console.error('Error details:', error);
+        
+        // Provide more specific error messages
+        if (error.message && error.message.includes('invalid_client')) {
+            return res.json({ 
+                success: false, 
+                message: 'Google Client ID không hợp lệ. Vui lòng kiểm tra lại cấu hình trong Google Cloud Console và file .env' 
+            });
+        }
+        
+        if (error.message && error.message.includes('audience')) {
+            return res.json({ 
+                success: false, 
+                message: 'Client ID không khớp. Đảm bảo Client ID trong frontend và backend giống nhau' 
+            });
+        }
+        
+        res.json({ success: false, message: 'Google authentication failed: ' + error.message });
     }
 };
 

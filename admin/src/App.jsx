@@ -16,7 +16,9 @@ import Vouchers from "./pages/Vouchers"
 import ChristmasEffects from "./components/ChristmasEffects"
 import Livestream from './pages/Livestream';
 
-export const backendUrl = import.meta.env.VITE_BACKEND_URL;
+// Logic: undefined (local) → 'http://localhost:4000', "" (Docker) → ''
+const backendEnv = import.meta.env.VITE_BACKEND_URL;
+export const backendUrl = backendEnv === undefined ? 'http://localhost:4000' : (backendEnv || '');
 export const currency = '$'
 
 
