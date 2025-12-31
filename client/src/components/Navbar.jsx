@@ -19,9 +19,9 @@ const Navbar = () => {
   };
 
   return (
-    <div className="christmas-navbar flex items-center justify-between py-5 font-medium">
+    <div className="christmas-navbar flex items-center justify-between py-3 sm:py-5 font-medium">
       <Link to="/" style={{ zIndex: 10, position: 'relative' }}>
-        <span className="text-3xl font-bold text-white" style={{ letterSpacing: '0.1em' }}>SHOPWEB</span>
+        <span className="text-xl sm:text-3xl font-bold text-white" style={{ letterSpacing: '0.1em' }}>SHOPWEB</span>
       </Link>
 
       <ul className="hidden sm:flex gap-8 text-sm items-center" style={{ zIndex: 10, position: 'relative' }}>
@@ -45,14 +45,14 @@ const Navbar = () => {
         </NavLink>
       </ul>
 
-      <div className="flex items-center gap-5" style={{ zIndex: 10, position: 'relative' }}>
+      <div className="flex items-center gap-3 sm:gap-5" style={{ zIndex: 10, position: 'relative' }}>
         <img
           onClick={() => {
             setShowSearch(true);
             navigate('/collection');
           }}
           src={assets.search_icon}
-          className="christmas-icon w-5 h-5 cursor-pointer"
+          className="christmas-icon w-5 h-5 sm:w-6 sm:h-6 cursor-pointer"
           alt=""
         />
 
@@ -95,33 +95,43 @@ const Navbar = () => {
         <img onClick={() => setVisible(true)} src={assets.menu_icon} className="christmas-icon w-5 h-5 cursor-pointer sm:hidden" alt="" />
       </div>
 
+      {/* Overlay backdrop for mobile menu */}
+      {visible && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 sm:hidden"
+          style={{ zIndex: 999 }}
+          onClick={() => setVisible(false)}
+        />
+      )}
+
       {/* Sidebar menu for small screens */}
       <div
-        className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-gradient-to-b from-christmas-red to-christmas-dark-red transition-all ${visible ? 'w-full' : 'w-0'
+        className={`fixed top-0 right-0 bottom-0 overflow-hidden bg-gradient-to-b from-christmas-red to-christmas-dark-red transition-all shadow-2xl ${visible ? 'w-[75%] sm:w-[60%]' : 'w-0'
           }`}
+        style={{ zIndex: 1000 }}
       >
-        <div className="flex flex-col text-white">
-          <div onClick={() => setVisible(false)} className="flex items-center gap-4 p-3 cursor-pointer hover:bg-white hover:text-christmas-red">
-            <img className="h-4 rotate-180 brightness-0 invert" src={assets.dropdown_icon} alt="" />
-            <p className="font-semibold">Back</p>
+        <div className="flex flex-col text-white h-full">
+          <div onClick={() => setVisible(false)} className="flex items-center gap-4 p-4 cursor-pointer hover:bg-white hover:text-christmas-red border-b border-christmas-gold">
+            <img className="h-5 rotate-180 brightness-0 invert" src={assets.dropdown_icon} alt="" />
+            <p className="font-bold text-lg">Back</p>
           </div>
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/">
-            Home
+          <NavLink onClick={() => setVisible(false)} className="py-3 pl-6 border-b border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold text-base" to="/">
+            🏠 Home
           </NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/about">
-            About
+          <NavLink onClick={() => setVisible(false)} className="py-3 pl-6 border-b border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold text-base" to="/collection">
+            🎁 Collection
           </NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/collection">
-            Gifts
+          <NavLink onClick={() => setVisible(false)} className="py-3 pl-6 border-b border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold text-base" to="/vouchers">
+            🎟️ Vouchers
           </NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/contact">
-            Share
+          <NavLink onClick={() => setVisible(false)} className="py-3 pl-6 border-b border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold text-base" to="/about">
+            ℹ️ About
           </NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/contact">
-            Contact
+          <NavLink onClick={() => setVisible(false)} className="py-3 pl-6 border-b border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold text-base" to="/contact">
+            📞 Contact
           </NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold" to="/livestream">
-            Livestream
+          <NavLink onClick={() => setVisible(false)} className="py-3 pl-6 border-b border-christmas-gold hover:bg-christmas-gold hover:text-christmas-red font-semibold text-base" to="/livestream">
+            📺 Livestream
           </NavLink>
         </div>
       </div>

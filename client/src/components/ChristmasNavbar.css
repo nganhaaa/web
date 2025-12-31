@@ -57,3 +57,30 @@
   font-weight: bold;
   border: 2px solid white;
 }
+
+/* Mobile responsive adjustments */
+@media (max-width: 640px) {
+  .christmas-navbar {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+  
+  .christmas-icon {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  .christmas-cart-badge {
+    font-size: 7px;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .christmas-nav-link {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.4rem;
+  }
+}
