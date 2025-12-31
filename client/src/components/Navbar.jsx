@@ -21,7 +21,7 @@ const Navbar = () => {
   return (
     <div className="christmas-navbar flex items-center justify-between py-5 font-medium">
       <Link to="/" style={{ zIndex: 10, position: 'relative' }}>
-        <img src={assets.logo} className="w-36 brightness-0 invert" alt="" />
+        <span className="text-3xl font-bold text-white" style={{ letterSpacing: '0.1em' }}>SHOPWEB</span>
       </Link>
 
       <ul className="hidden sm:flex gap-8 text-sm items-center" style={{ zIndex: 10, position: 'relative' }}>

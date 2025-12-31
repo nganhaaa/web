@@ -1,4 +1,4 @@
-# 🎄 Forever - E-commerce Platform
+# 🎄 ShopWeb - E-commerce Platform
 
 > Nền tảng thương mại điện tử với tích hợp AI chatbot, hệ thống review, và thanh toán MoMo.
 

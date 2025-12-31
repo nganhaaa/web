@@ -173,7 +173,7 @@ const ChatBox = () => {
         
         <div className="h-14 flex justify-center items-center bg-gradient-to-r from-red-600 via-green-600 to-red-600 w-full sm:rounded-t-xl relative">
           <p className="text-white text-base font-bold text-center flex items-center gap-2">
-            🎅 Forever - Merry Christmas
+            🎅 ShopWeb - Merry Christmas
           </p>
           <div
             onClick={onCloseModel}

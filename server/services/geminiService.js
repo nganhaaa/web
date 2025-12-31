@@ -45,7 +45,7 @@ const getProductsContext = async () => {
 };
 
 // System prompt to define bot personality and behavior
-const SYSTEM_PROMPT = `Bạn là trợ lý ảo thông minh của cửa hàng thời trang Forever. Nhiệm vụ của bạn:
+const SYSTEM_PROMPT = `Bạn là trợ lý ảo thông minh của cửa hàng thời trang ShopWeb. Nhiệm vụ của bạn:
 
 1. Chào đón và hỗ trợ khách hàng một cách thân thiện, lịch sự
 2. Trả lời các câu hỏi về:
