@@ -115,6 +115,16 @@ const PlaceOrder = () => {
   };
 
   return (
+    <div className="relative min-h-screen">
+    {/* Background image with overlay */}
+    <div 
+      className="fixed inset-0 bg-cover bg-center bg-no-repeat -z-10"
+      style={{
+        backgroundImage: "url('/christmas9.jpg')",
+      }}
+    >
+      <div className="absolute inset-0 bg-white/85"></div>
+    </div>
     <form
       onSubmit={onSubmitHandler}
       className="flex flex-col sm:flex-row justify-between gap-10 pt-5 sm:pt-14 min-h-[80vh] border-t"
@@ -124,47 +134,49 @@ const PlaceOrder = () => {
         <div className="text-xl sm:text-2xl my-3">
           <Title text1={'DELIVERY'} text2={'INFORMATION 📦'} />
         </div>
-        <div className="flex gap-3">
+        <div className="bg-white rounded-lg p-6 border-2 border-gold-300 shadow-lg">
+          <div className="flex gap-3 mb-4">
+            <input
+              required
+              onChange={onChangeHandler}
+              name="name"
+              value={formData.name}
+              className="christmas-input w-full"
+              type="text"
+              placeholder="Full Name"
+            />
+          </div>
           <input
             required
             onChange={onChangeHandler}
-            name="name"
-            value={formData.name}
-            className="christmas-input w-full"
+            name="email"
+            value={formData.email}
+            className="christmas-input w-full mb-4"
+            type="email"
+            placeholder="Email Address"
+          />
+          <input
+            required
+            onChange={onChangeHandler}
+            name="address"
+            value={formData.address}
+            className="christmas-input w-full mb-4"
             type="text"
-            placeholder="Full Name"
+            placeholder="Delivery Address"
           />
-        </div>
-        <input
-          required
-          onChange={onChangeHandler}
-          name="email"
-          value={formData.email}
-          className="christmas-input w-full"
-          type="email"
-          placeholder="Email Address"
-        />
-        <input
-          required
-          onChange={onChangeHandler}
-          name="address"
-          value={formData.address}
-          className="christmas-input w-full"
-          type="text"
-          placeholder="Delivery Address"
-        />
-      
-        <div>
-          <input
-            required
-            onChange={onChangeHandler}
-            name="phone"
-            value={formData.phone}
-            className={`christmas-input w-full ${phoneError ? 'border-red-500' : ''}`}
-            type="number"
-            placeholder="Phone Number"
-          />
-          {phoneError && <p className="text-red-500 text-sm mt-1">❌ {phoneError}</p>}
+        
+          <div>
+            <input
+              required
+              onChange={onChangeHandler}
+              name="phone"
+              value={formData.phone}
+              className={`christmas-input w-full ${phoneError ? 'border-red-500' : ''}`}
+              type="number"
+              placeholder="Phone Number"
+            />
+            {phoneError && <p className="text-red-500 text-sm mt-1">❌ {phoneError}</p>}
+          </div>
         </div>
       </div>
 
@@ -214,6 +226,7 @@ const PlaceOrder = () => {
         </div>
       </div>
     </form>
+    </div>
   );
 };
 

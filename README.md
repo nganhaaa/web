@@ -220,4 +220,4 @@ For issues and questions, please open an issue on GitHub.
 
 ---
 
-**Last Updated**: 2024
+**Last Updated**: 2025

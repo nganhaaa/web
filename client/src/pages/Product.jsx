@@ -323,6 +323,15 @@ const Product = () => {
 
   return product ? (
     <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
+      {/* Background image with overlay */}
+    <div 
+      className="fixed inset-0 bg-cover bg-center bg-no-repeat -z-10"
+      style={{
+        backgroundImage: "url('/christmas6.jpg')",
+      }}
+    >
+      <div className="absolute inset-0 bg-white/85"></div>
+    </div>
       <div className="flex gap-12 flex-col sm:flex-row">
         {/* group image product */}
         <div className="flex flex-1 flex-col-reverse gap-3 sm:flex-row">
@@ -345,31 +354,31 @@ const Product = () => {
 
         {/* info product */}
         <div className="flex-1">
-          <h1 className="font-medium text-2xl">{product.name}</h1>
+          <h1 className="font-bold text-2xl">{product.name}</h1>
           <div className="flex gap-1 mt-4 items-center">
             {[1, 2, 3, 4, 5].map((star) => (
               <img 
                 key={star}
                 src={star <= Math.round(averageRating) ? assets.star_icon : assets.star_dull_icon} 
                 alt="" 
-                className="w-3" 
+                className="w-5 h-5" 
               />
             ))}
-            <p className="pl-2">({totalReviews})</p>
+            <p className="pl-2 font-semibold">({totalReviews})</p>
           </div>
-          <p className="font-medium text-3xl mt-5">
+          <p className="font-bold text-3xl mt-5">
             {currency}
             {product.price}
           </p>
-          <p className="mt-5 text-gray-500 md:w-[80%]">{product.description}</p>
+          <p className="mt-5 text-gray-700 md:w-[80%] font-medium">{product.description}</p>
           <div className="flex flex-col gap-3 my-8">
-            <p>Select Size</p>
+            <p className="font-bold">Select Size</p>
             <div className="flex gap-2">
               {product.sizes.map((item, index) => (
                 <button
                   onClick={() => setSize(item)}
                   key={index}
-                  className={`border py-2 px-4 bg-gray-100 hover:border-orange-400 ${
+                  className={`border py-2 px-4 bg-gray-100 hover:border-orange-400 font-bold ${
                     item === size ? "bg-orange-400" : ""
                   }`}
                 >
@@ -381,7 +390,7 @@ const Product = () => {
           <div className="flex gap-4">
             <button
               onClick={() => addToCart(product._id, size)}
-              className="bg-black text-white px-8 py-3 text-sm active:bg-gray-700"
+              className="bg-black text-white px-8 py-3 text-sm active:bg-gray-700 font-bold"
             >
               ADD TO CART
             </button>
@@ -404,7 +413,7 @@ const Product = () => {
             </button>
           </div>
           <hr className="my-8 sm:w-4/5" />
-          <div className="flex flex-col gap-1 text-gray-500 text-sm ">
+          <div className="flex flex-col gap-1 text-gray-600 text-sm font-medium">
             <p>100% Original product.</p>
             <p>Cash on delivery is available on this product.</p>
             <p>Easy return and exchange policy within 7 days.</p>
@@ -416,20 +425,20 @@ const Product = () => {
         <div className="flex border-b">
           <button
             onClick={() => setActiveTab('description')}
-            className={`py-3 px-4 text-sm ${activeTab === 'description' ? 'border-b-2 border-black font-bold' : 'text-gray-500'}`}
+            className={`py-3 px-4 text-sm font-bold ${activeTab === 'description' ? 'border-b-2 border-black' : 'text-gray-500'}`}
           >
             Description
           </button>
           <button
             onClick={() => setActiveTab('reviews')}
-            className={`py-3 px-4 text-sm ${activeTab === 'reviews' ? 'border-b-2 border-black font-bold' : 'text-gray-500'}`}
+            className={`py-3 px-4 text-sm font-bold ${activeTab === 'reviews' ? 'border-b-2 border-black' : 'text-gray-500'}`}
           >
             Reviews ({totalReviews})
           </button>
         </div>
 
         {activeTab === 'description' ? (
-          <div className="flex flex-col gap-4 border p-5 text-sm text-gray-500">
+          <div className="flex flex-col gap-4 border-2 border-gold-300 p-5 text-sm text-gray-600 bg-white rounded-lg shadow-lg font-medium">
             <p>
               An e-commerce website is an online platform that facilitates the
               buying and selling of products or services over the internet. It
@@ -447,7 +456,7 @@ const Product = () => {
             </p>
           </div>
         ) : (
-          <div className="border p-5">
+          <div className="border-2 border-gold-300 p-5 bg-white rounded-lg shadow-lg">
             {/* User's existing review with Edit/Delete buttons */}
             {userReview && !showReviewForm && (
               <div className="mb-4 p-4 border rounded bg-gray-50">
@@ -474,7 +483,7 @@ const Product = () => {
                       key={star}
                       src={star <= userReview.rating ? assets.star_icon : assets.star_dull_icon}
                       alt=""
-                      className="w-4 h-4"
+                      className="w-5 h-5"
                     />
                   ))}
                 </div>
@@ -501,7 +510,7 @@ const Product = () => {
             {canReview && !showReviewForm && !userReview && (
               <button
                 onClick={() => setShowReviewForm(true)}
-                className="bg-black text-white px-6 py-2 text-sm mb-4"
+                className="bg-black text-white px-6 py-2 text-sm mb-4 font-bold"
               >
                 Write a Review
               </button>
@@ -513,7 +522,7 @@ const Product = () => {
                 
                 {/* Rating */}
                 <div className="mb-4">
-                  <label className="block text-sm font-medium mb-2">Rating</label>
+                  <label className="block text-sm font-bold mb-2">Rating</label>
                   <div className="flex gap-2">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
@@ -524,7 +533,7 @@ const Product = () => {
                         <img
                           src={star <= reviewData.rating ? assets.star_icon : assets.star_dull_icon}
                           alt=""
-                          className="w-6 h-6 cursor-pointer"
+                          className="w-7 h-7 cursor-pointer"
                         />
                       </button>
                     ))}
@@ -533,7 +542,7 @@ const Product = () => {
 
                 {/* Comment */}
                 <div className="mb-4">
-                  <label className="block text-sm font-medium mb-2">Comment (optional)</label>
+                  <label className="block text-sm font-bold mb-2">Comment (optional)</label>
                   <textarea
                     value={reviewData.comment}
                     onChange={(e) => setReviewData({ ...reviewData, comment: e.target.value })}
@@ -545,7 +554,7 @@ const Product = () => {
 
                 {/* Images */}
                 <div className="mb-4">
-                  <label className="block text-sm font-medium mb-2">
+                  <label className="block text-sm font-bold mb-2">
                     Photos (optional, max 5 total)
                   </label>
                   
@@ -609,7 +618,7 @@ const Product = () => {
 
                 {/* Videos */}
                 <div className="mb-4">
-                  <label className="block text-sm font-medium mb-2">
+                  <label className="block text-sm font-bold mb-2">
                     Add Videos (optional, max 2 videos, 30MB each)
                   </label>
                   
@@ -679,7 +688,7 @@ const Product = () => {
                 <div className="flex gap-2">
                   <button
                     type="submit"
-                    className="bg-black text-white px-6 py-2 text-sm"
+                    className="bg-black text-white px-6 py-2 text-sm font-bold"
                   >
                     {editingReview ? 'Update Review' : 'Submit Review'}
                   </button>
@@ -690,7 +699,7 @@ const Product = () => {
                       setEditingReview(false);
                       setReviewData({ rating: 5, comment: '', images: [], existingImages: [], videos: [], existingVideos: [] });
                     }}
-                    className="border border-gray-300 px-6 py-2 text-sm"
+                    className="border border-gray-300 px-6 py-2 text-sm font-bold"
                   >
                     Cancel
                   </button>
@@ -707,7 +716,7 @@ const Product = () => {
                   <div key={review._id} className="border-b pb-4">
                     <div className="mb-2">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-medium">{review.userId?.name || 'Anonymous'}</span>
+                        <span className="font-bold">{review.userId?.name || 'Anonymous'}</span>
                         <span className="text-gray-500 text-xs">
                           {new Date(review.createdAt).toLocaleDateString()}
                         </span>
@@ -718,7 +727,7 @@ const Product = () => {
                             key={star}
                             src={star <= review.rating ? assets.star_icon : assets.star_dull_icon}
                             alt=""
-                            className="w-4 h-4"
+                            className="w-5 h-5"
                           />
                         ))}
                       </div>

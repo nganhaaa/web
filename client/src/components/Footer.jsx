@@ -35,7 +35,7 @@ const Footer = () => {
 
       <div>
         <hr className='border-gold-500'/>
-        <p className='text-center py-5 text-sm text-white opacity-80'>Copyright 2024 - All Right Reserved. Happy Holidays!</p>
+        <p className='text-center py-5 text-sm text-white opacity-80'>Copyright 2025 - All Right Reserved. Happy Holidays!</p>
       </div>
     </footer>
   )

@@ -183,7 +183,7 @@ const Vouchers = ({ token }) => {
                 value={formData.code}
                 onChange={handleInputChange}
                 className="christmas-input"
-                placeholder="SUMMER2024"
+                placeholder="WINTER2025"
                 required
                 disabled={editMode}
               />

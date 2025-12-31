@@ -140,7 +140,16 @@ const Cart = () => {
   };
 
   return (
-    <div className="border-t pt-14">
+    <div className="border-t pt-14 relative min-h-screen">
+    {/* Background image with overlay */}
+    <div 
+      className="fixed inset-0 bg-cover bg-center bg-no-repeat -z-10"
+      style={{
+        backgroundImage: "url('/christmas7.jpg')",
+      }}
+    >
+      <div className="absolute inset-0 bg-white/85"></div>
+    </div>
       <div className=" text-2xl mb-3">
         <Title text1={'YOUR'} text2={'CART 🛒'} />
       </div>
@@ -157,7 +166,7 @@ const Cart = () => {
           return (
             <div
               key={index}
-              className="py-4 border-t border-b border-gold-200 text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4"
+              className="py-4 px-4 my-3 bg-white rounded-lg border-2 border-gold-300 text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4 shadow-lg hover:shadow-xl hover:border-red-400 transition-all"
             >
               <div className=" flex items-start gap-6" style={{ cursor: "pointer" }} onClick={() => { window.location.pathname = `/product/${item._id}` }}>
                 <img className="w-16 sm:w-20 rounded-lg border-2 border-gold-300" src={productData.image[0]} alt="" />
